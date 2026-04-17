@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Verbs • क्रिया शब्द कोश</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Noto+Sans+Devanagari:wght@400;600&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Navy Blue Theme Variables */
+  --bg: #0b1121;           /* Dark Navy Background */
+  --surface: #111827;      /* Slightly lighter Navy */
+  --card: #1f2937;         /* Card Background */
+  --card-h: #374151;       /* Card Hover */
+  --border: #374151;       /* Border Color */
+  --bl: #4b5563;
+  
+  --primary: #3b82f6;      /* Primary Blue */
+  --primary-d: rgba(59,130,246,0.15);
+  --primary-b: rgba(59,130,246,0.3);
+  --accent: #0ea5e9;       /* Light Blue Accent */
+  
+  --cream: #f3f4f6;        /* Light Text */
+  --muted: #9ca3af;        /* Muted Text */
+  --hindi: #cbd5e1;
+  --english: #93c5fd;
+  
+  /* Verb Colors */
+  --v1: #3b82f6;           /* Blue */
+  --v2: #8b5cf6;           /* Purple */
+  --v3: #ec4899;           /* Pink */
+  
+  --search-bg: #0f172a;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--cream);font-family:'Crimson Pro',Georgia,serif;font-size:17px;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(11,17,33,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:62px;display:flex;align-items:center;padding:0 1.2rem;gap:1rem;}
+.logo{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--primary);flex-shrink:0;line-height:1.2;}
+.logo em{font-style:italic;color:var(--cream);font-weight:400;font-size:0.88rem;display:block;}
+
+.mode-switcher{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px;flex-shrink:0;}
+.mode-btn{border:none;background:transparent;color:var(--muted);padding:6px 11px;border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.04em;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.mode-btn svg{opacity:0.6;flex-shrink:0;width:13px;height:13px;}
+.mode-btn.active{background:var(--primary);color:#ffffff;font-weight:600;}
+.mode-btn.active svg{opacity:1;}
+
+/* SEARCH BAR */
+.search-wrap{position:sticky;top:62px;z-index:150;background:rgba(11,17,33,0.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0.65rem 1.2rem;display:flex;gap:0.6rem;align-items:center;}
+.search-inner{position:relative;flex:1;max-width:500px;}
+.search-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+#searchInput{width:100%;background:var(--search-bg);border:1px solid var(--border);border-radius:10px;padding:0.6rem 0.9rem 0.6rem 2.5rem;color:var(--cream);font-family:'Crimson Pro',serif;font-size:1rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+#searchInput::placeholder{color:var(--muted);}
+#searchInput:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-d);}
+.search-clear{position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;display:none;padding:2px;}
+.search-clear:hover{color:var(--cream);}
+#searchInput:not(:placeholder-shown) ~ .search-clear{display:block;}
+.search-count{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+#searchCount b{color:var(--primary);}
+
+/* SUGGESTIONS DROPDOWN */
+.suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;max-height:260px;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.5);z-index:300;display:none;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.suggestions.show{display:block;}
+.sug-item{padding:0.55rem 1rem;cursor:pointer;display:flex;align-items:center;gap:0.8rem;border-bottom:1px solid var(--border);transition:background 0.15s;}
+.sug-item:last-child{border-bottom:none;}
+.sug-item:hover,.sug-item.focused{background:var(--card-h);}
+.sug-v1{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--primary);min-width:90px;}
+.sug-hindi{font-family:'Noto Sans Devanagari',sans-serif;font-size:0.82rem;color:var(--hindi);}
+.sug-forms{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);margin-left:auto;}
+mark{background:var(--primary-b);color:var(--primary);border-radius:2px;padding:0 1px;}
+
+/* ALPHABET TABS */
+.alpha-wrap{position:sticky;top:calc(62px + 54px);z-index:100;background:rgba(11,17,33,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:0.35rem 1.2rem;overflow-x:auto;scrollbar-width:none;display:flex;gap:3px;align-items:center;}
+.alpha-wrap::-webkit-scrollbar{display:none;}
+.alpha-btn{border:1px solid var(--border);background:transparent;color:var(--muted);padding:4px 8px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.05em;transition:all 0.18s;flex-shrink:0;line-height:1;}
+.alpha-btn:hover{border-color:var(--primary);color:var(--cream);}
+.alpha-btn.active{background:var(--primary-d);border-color:var(--primary);color:var(--primary);}
+.alpha-btn.has-match{color:var(--cream);}
+
+/* INFO BAR */
+.info-bar{background:rgba(11,17,33,0.9);border-bottom:1px solid var(--border);padding:0.35rem 1.2rem;font-family:'Noto Sans Devanagari','DM Mono',monospace;font-size:0.7rem;color:var(--muted);display:flex;align-items:center;gap:8px;line-height:1.5;}
+.info-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.info-bar b{color:var(--primary);font-weight:600;font-family:'DM Mono',monospace;font-size:0.66rem;}
+
+/* LAYOUT */
+.app{display:flex;min-height:calc(100vh - 170px);}
+
+/* SIDEBAR */
+.sidebar{width:195px;flex-shrink:0;border-right:1px solid var(--border);position:sticky;top:170px;height:calc(100vh - 170px);overflow-y:auto;padding:0.7rem 0;scrollbar-width:none;display:none;}
+@media(min-width:900px){.sidebar{display:block;}}
+.sidebar::-webkit-scrollbar{display:none;}
+.sb-item{display:flex;align-items:center;gap:7px;padding:6px 1rem;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.04em;border-left:2px solid transparent;transition:all 0.18s;}
+.sb-item:hover{color:var(--cream);background:var(--surface);}
+.sb-item.active{color:var(--primary);border-left-color:var(--primary);background:var(--primary-d);}
+.sb-letter{font-size:0.8rem;font-weight:500;color:var(--accent);width:16px;}
+.sb-cnt{font-size:0.55rem;color:var(--muted);margin-left:auto;}
+
+/* MAIN */
+main{flex:1;padding:1.6rem 1.4rem 6rem;max-width:900px;margin:0 auto;}
+
+/* ALPHA SECTION */
+.alpha-section{margin-bottom:2.5rem;animation:fadeUp 0.3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.alpha-head{display:flex;align-items:baseline;gap:0.7rem;margin-bottom:0.9rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.alpha-letter{font-family:'Playfair Display',serif;font-size:2rem;color:var(--primary);line-height:1;}
+.alpha-count{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;}
+
+/* TABLE (Updated with Click & Dropdown Feature) */
+.verb-table{width:100%;border-collapse:collapse;font-size:0.97rem;}
+.verb-table thead th{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:0.4rem 0.8rem;border-bottom:2px solid var(--border);text-align:left;}
+.verb-table tbody tr.main-row{border-bottom:1px solid var(--border);transition:background 0.15s; cursor: pointer;}
+.verb-table tbody tr.main-row:hover{background:var(--card-h);}
+.verb-table td{padding:0.65rem 0.8rem;vertical-align:middle;}
+.td-num{font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--muted);width:36px;text-align:center;}
+.td-v1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--v1);}
+.td-hi{font-family:'Noto Sans Devanagari',sans-serif;font-size:0.95rem;color:var(--hindi);font-weight:400;}
+
+/* Hidden Detail Row Styles */
+.detail-row { display: none; background-color: var(--surface); border-bottom: 2px solid var(--border); }
+.detail-row.show { display: table-row; animation: fadeDown 0.2s ease forwards; }
+.detail-container { display: flex; justify-content: space-around; padding: 1.2rem; background: rgba(0,0,0,0.1); border-radius: 8px; margin: 0.5rem 0; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
+.detail-box { text-align: center; }
+.db-lbl { display: block; font-family:'DM Mono',monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.db-val { font-family:'Playfair Display',serif; font-size: 1.2rem; font-weight: 600; }
+.db-v1 { color: var(--v1); }
+.db-v2 { color: var(--v2); }
+.db-v3 { color: var(--v3); }
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* CARDS LAYOUT (Updated styles) */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.8rem;}
+.v-card{border:1px solid var(--border);border-radius:10px;padding:1rem;background:var(--card);transition:border-color 0.2s,background 0.2s,transform 0.15s;position:relative;overflow:hidden;}
+.v-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--v3));opacity:0.5;}
+.v-card:hover{background:var(--card-h);border-color:var(--bl);transform:translateY(-2px);}
+.vc-num{font-family:'DM Mono',monospace;font-size:0.52rem;color:var(--muted);position:absolute;top:0.6rem;right:0.7rem;}
+
+.vc-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 0.8rem; }
+.vc-v1{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--v1);}
+.vc-hindi{font-family:'Noto Sans Devanagari',sans-serif;font-size:0.95rem;color:var(--hindi);}
+
+.vc-forms{display:flex;flex-direction:column;gap:6px;border-top:1px dashed var(--bl);padding-top:0.8rem;}
+.vc-form{display:flex;align-items:center;gap:10px;font-size:1rem;}
+.vc-lbl{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);width:22px;letter-spacing:0.05em; background: var(--surface); padding: 2px 4px; border-radius: 4px; text-align: center;}
+.vc-form.v2 .vc-val{color:var(--v2); font-weight: 600; font-family:'Playfair Display',serif; font-size: 1.15rem;}
+.vc-form.v3 .vc-val{color:var(--v3); font-weight: 600; font-family:'Playfair Display',serif; font-size: 1.15rem;}
+
+/* MODE DISPLAY CONTROL */
+body.mode-table .cards-grid{display:none;}
+body.mode-table .verb-table{display:table;}
+body.mode-cards .verb-table{display:none;}
+body.mode-cards .cards-grid{display:grid;}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:4rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;display:none;}
+.no-results svg{opacity:0.3;margin-bottom:1rem; color: var(--primary);}
+.no-results p{margin-bottom:0.3rem;}
+.no-results small{font-size:0.65rem;}
+
+@media(max-width:600px){
+  header{gap:0.5rem;}
+  .logo em{display:none;}
+  main{padding:1rem 0.8rem 4rem;}
+  .alpha-wrap{top:calc(62px + 54px);}
+  .detail-container { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body class="mode-table">
+
+<header>
+  <div class="logo">Verb Kosh<em>क्रिया शब्द कोश</em></div>
+
+  <div class="mode-switcher">
+    <button class="mode-btn active" id="mb-table" onclick="setMode('table')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      Table
+    </button>
+    <button class="mode-btn" id="mb-cards" onclick="setMode('cards')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="9" height="7" rx="2"/><rect x="13" y="4" width="9" height="7" rx="2"/><rect x="2" y="14" width="9" height="7" rx="2"/><rect x="13" y="14" width="9" height="7" rx="2"/></svg>
+      Cards
+    </button>
+  </div>
+</header>
+
+<div class="search-wrap">
+  <div class="search-inner">
+    <span class="search-icon">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </span>
+    <input type="text" id="searchInput" placeholder="Search" autocomplete="off" spellcheck="false">
+    <button class="search-clear" onclick="clearSearch()">✕</button>
+    <div class="suggestions" id="suggestions"></div>
+  </div>
+  <div class="search-count" id="searchCount"><b id="scNum">400</b> verbs</div>
+</div>
+
+<div class="alpha-wrap" id="alphaTabs"></div>
+
+<div class="info-bar" id="infoBar">
+  <div class="info-dot"></div>
+  <span id="infoText"><b>Table Mode</b> — Row पर Click करें और V1, V2, V3 देखें</span>
+</div>
+
+<div class="app">
+  <div class="sidebar" id="sidebar"></div>
+
+  <main id="main">
+    <div class="no-results" id="noResults">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <p>कोई परिणाम नहीं मिला</p>
+      <small>Try searching in English or Hindi</small>
+    </div>
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  VERB DATA — 400 verbs
+// ══════════════════════════════════════════════
+const VERBS = [
+  {v1:"abide", v2:"abode", v3:"abode", hi:"पालन करना / टिकना"},
+  {v1:"absorb", v2:"absorbed", v3:"absorbed", hi:"सोख लेना"},
+  {v1:"accept", v2:"accepted", v3:"accepted", hi:"स्वीकार करना"},
+  {v1:"ache", v2:"ached", v3:"ached", hi:"दर्द होना"},
+  {v1:"achieve", v2:"achieved", v3:"achieved", hi:"हासिल करना"},
+  {v1:"acquire", v2:"acquired", v3:"acquired", hi:"प्राप्त करना"},
+  {v1:"act", v2:"acted", v3:"acted", hi:"अभिनय करना / काम करना"},
+  {v1:"add", v2:"added", v3:"added", hi:"जोड़ना"},
+  {v1:"address", v2:"addressed", v3:"addressed", hi:"संबोधित करना"},
+  {v1:"adjust", v2:"adjusted", v3:"adjusted", hi:"समायोजित करना"},
+  {v1:"admire", v2:"admired", v3:"admired", hi:"प्रशंसा करना"},
+  {v1:"admit", v2:"admitted", v3:"admitted", hi:"स्वीकार करना / भर्ती करना"},
+  {v1:"adopt", v2:"adopted", v3:"adopted", hi:"गोद लेना / अपनाना"},
+  {v1:"advise", v2:"advised", v3:"advised", hi:"सलाह देना"},
+  {v1:"afford", v2:"afforded", v3:"afforded", hi:"बर्दाश्त करना (खर्च)"},
+  {v1:"agree", v2:"agreed", v3:"agreed", hi:"सहमत होना"},
+  {v1:"aim", v2:"aimed", v3:"aimed", hi:"लक्ष्य रखना"},
+  {v1:"allow", v2:"allowed", v3:"allowed", hi:"अनुमति देना"},
+  {v1:"alter", v2:"altered", v3:"altered", hi:"बदलना"},
+  {v1:"amuse", v2:"amused", v3:"amused", hi:"मनोरंजन करना"},
+  {v1:"analyze", v2:"analyzed", v3:"analyzed", hi:"विश्लेषण करना"},
+  {v1:"announce", v2:"announced", v3:"announced", hi:"घोषणा करना"},
+  {v1:"annoy", v2:"annoyed", v3:"annoyed", hi:"खीज दिलाना / चिढ़ाना / परेशान करना"},
+  {v1:"answer", v2:"answered", v3:"answered", hi:"उत्तर देना"},
+  {v1:"apologize", v2:"apologized", v3:"apologized", hi:"माफी माँगना"},
+  {v1:"appear", v2:"appeared", v3:"appeared", hi:"प्रकट होना"},
+  {v1:"apply", v2:"applied", v3:"applied", hi:"लागू करना / आवेदन करना"},
+  {v1:"appreciate", v2:"appreciated", v3:"appreciated", hi:"सराहना करना"},
+  {v1:"approach", v2:"approached", v3:"approached", hi:"समीप आना / संपर्क करना"},
+  {v1:"approve", v2:"approved", v3:"approved", hi:"मंजूरी देना"},
+  {v1:"argue", v2:"argued", v3:"argued", hi:"बहस करना"},
+  {v1:"arise", v2:"arose", v3:"arisen", hi:"उठना / उत्पन्न होना"},
+  {v1:"arrange", v2:"arranged", v3:"arranged", hi:"व्यवस्था करना"},
+  {v1:"arrest", v2:"arrested", v3:"arrested", hi:"गिरफ्तार करना"},
+  {v1:"arrive", v2:"arrived", v3:"arrived", hi:"पहुँचना"},
+  {v1:"ask", v2:"asked", v3:"asked", hi:"पूछना / माँगना"},
+  {v1:"assess", v2:"assessed", v3:"assessed", hi:"मूल्यांकन करना"},
+  {v1:"assist", v2:"assisted", v3:"assisted", hi:"सहायता करना"},
+  {v1:"assume", v2:"assumed", v3:"assumed", hi:"मान लेना"},
+  {v1:"attach", v2:"attached", v3:"attached", hi:"जोड़ना / संलग्न करना"},
+  {v1:"attack", v2:"attacked", v3:"attacked", hi:"आक्रमण करना"},
+  {v1:"attempt", v2:"attempted", v3:"attempted", hi:"प्रयास करना"},
+  {v1:"attend", v2:"attended", v3:"attended", hi:"उपस्थित होना"},
+  {v1:"attract", v2:"attracted", v3:"attracted", hi:"आकर्षित करना"},
+  {v1:"avoid", v2:"avoided", v3:"avoided", hi:"बचना / टालना"},
+  {v1:"awake", v2:"awoke", v3:"awoken", hi:"जागना"},
+  {v1:"award", v2:"awarded", v3:"awarded", hi:"इनाम देना"},
+  {v1:"bake", v2:"baked", v3:"baked", hi:"सेंकना"},
+  {v1:"balance", v2:"balanced", v3:"balanced", hi:"संतुलन बनाना"},
+  {v1:"ban", v2:"banned", v3:"banned", hi:"प्रतिबंध लगाना"},
+  {v1:"bang", v2:"banged", v3:"banged", hi:"जोर से मारना"},
+  {v1:"bark", v2:"barked", v3:"barked", hi:"भौंकना"},
+  {v1:"base", v2:"based", v3:"based", hi:"आधार बनाना"},
+  {v1:"bathe", v2:"bathed", v3:"bathed", hi:"स्नान करना/ नहाना"},
+  {v1:"defecate", v2:"defecated", v3:"defecated", hi:"हगना / मल त्याग करना"},
+  {v1:"pee", v2:"peed", v3:"peed", hi:"पेशाब करना"},
+  
+  {v1:"be", v2:"was / were", v3:"been", hi:"होना"},
+  {v1:"bear", v2:"bore", v3:"borne", hi:"सहन करना / जन्म देना"},
+  {v1:"beat", v2:"beat", v3:"beaten", hi:"पीटना / हराना"},
+  {v1:"become", v2:"became", v3:"become", hi:"बनना / होना"},
+  {v1:"beg", v2:"begged", v3:"begged", hi:"भीख माँगना"},
+  {v1:"urinate", v2:"urinated", v3:"urinated", hi:"पेशाब करना / मूत्र त्याग करना"},
+  {v1:"begin", v2:"began", v3:"begun", hi:"शुरू करना"},
+  {v1:"behave", v2:"behaved", v3:"behaved", hi:"व्यवहार करना"},
+  {v1:"believe", v2:"believed", v3:"believed", hi:"विश्वास करना"},
+  {v1:"belong", v2:"belonged", v3:"belonged", hi:"संबंधित होना"},
+  {v1:"bend", v2:"bent", v3:"bent", hi:"झुकना / मोड़ना"},
+  {v1:"bet", v2:"bet", v3:"bet", hi:"शर्त लगाना"},
+  {v1:"betray", v2:"betrayed", v3:"betrayed", hi:"धोखा देना"},
+  {v1:"bind", v2:"bound", v3:"bound", hi:"बाँधना"},
+  {v1:"bite", v2:"bit", v3:"bitten", hi:"काटना (दाँत से)"},
+  {v1:"bleed", v2:"bled", v3:"bled", hi:"खून बहना"},
+  {v1:"bless", v2:"blessed", v3:"blessed", hi:"आशीर्वाद देना"},
+  {v1:"blind", v2:"blinded", v3:"blinded", hi:"अंधा करना"},
+  {v1:"blink", v2:"blinked", v3:"blinked", hi:"पलक झपकाना"},
+  {v1:"block", v2:"blocked", v3:"blocked", hi:"रोकना / बंद करना"},
+  {v1:"blow", v2:"blew", v3:"blown", hi:"हवा बहना / फूँकना"},
+  {v1:"boast", v2:"boasted", v3:"boasted", hi:"डींग मारना"},
+  {v1:"boil", v2:"boiled", v3:"boiled", hi:"उबालना"},
+  {v1:"borrow", v2:"borrowed", v3:"borrowed", hi:"उधार लेना"},
+  {v1:"bother", v2:"bothered", v3:"bothered", hi:"परेशान करना"},
+  {v1:"bow", v2:"bowed", v3:"bowed", hi:"झुकना / नमन करना"},
+  {v1:"break", v2:"broke", v3:"broken", hi:"तोड़ना / फोड़ना"},
+  {v1:"breathe", v2:"breathed", v3:"breathed", hi:"साँस लेना"},
+  {v1:"bring", v2:"brought", v3:"brought", hi:"लाना"},
+  {v1:"broadcast", v2:"broadcast", v3:"broadcast", hi:"प्रसारण करना"},
+  {v1:"brush", v2:"brushed", v3:"brushed", hi:"ब्रश करना"},
+  {v1:"build", v2:"built", v3:"built", hi:"निर्माण करना"},
+  {v1:"burn", v2:"burnt", v3:"burnt", hi:"जलना / जलाना"},
+  {v1:"burst", v2:"burst", v3:"burst", hi:"फटना"},
+  {v1:"bury", v2:"buried", v3:"buried", hi:"दफनाना / गाड़ना"},
+  {v1:"buy", v2:"bought", v3:"bought", hi:"खरीदना"},
+  {v1:"calculate", v2:"calculated", v3:"calculated", hi:"गणना करना"},
+  {v1:"call", v2:"called", v3:"called", hi:"बुलाना / फोन करना"},
+  {v1:"camp", v2:"camped", v3:"camped", hi:"शिविर लगाना"},
+  {v1:"care", v2:"cared", v3:"cared", hi:"परवाह करना"},
+  {v1:"carry", v2:"carried", v3:"carried", hi:"ले जाना"},
+  {v1:"carve", v2:"carved", v3:"carved", hi:"तराशना"},
+  {v1:"catch", v2:"caught", v3:"caught", hi:"पकड़ना"},
+  {v1:"cause", v2:"caused", v3:"caused", hi:"कारण बनना"},
+  {v1:"celebrate", v2:"celebrated", v3:"celebrated", hi:"उत्सव मनाना"},
+  {v1:"challenge", v2:"challenged", v3:"challenged", hi:"चुनौती देना"},
+  {v1:"change", v2:"changed", v3:"changed", hi:"बदलना"},
+  {v1:"charge", v2:"charged", v3:"charged", hi:"दाम लगाना / आरोप लगाना"},
+  {v1:"chase", v2:"chased", v3:"chased", hi:"पीछा करना"},
+  {v1:"chat", v2:"chatted", v3:"chatted", hi:"बातचीत करना"},
+  {v1:"cheat", v2:"cheated", v3:"cheated", hi:"धोखा देना"},
+  {v1:"check", v2:"checked", v3:"checked", hi:"जांच करना"},
+  {v1:"cheer", v2:"cheered", v3:"cheered", hi:"प्रोत्साहित करना"},
+  {v1:"chew", v2:"chewed", v3:"chewed", hi:"चबाना"},
+  {v1:"choose", v2:"chose", v3:"chosen", hi:"चुनना"},
+  {v1:"chop", v2:"chopped", v3:"chopped", hi:"काटना (टुकड़ों में)"},
+  {v1:"claim", v2:"claimed", v3:"claimed", hi:"दावा करना"},
+  {v1:"clap", v2:"clapped", v3:"clapped", hi:"ताली बजाना"},
+  {v1:"clean", v2:"cleaned", v3:"cleaned", hi:"साफ करना"},
+  {v1:"clear", v2:"cleared", v3:"cleared", hi:"स्पष्ट करना"},
+  {v1:"click", v2:"clicked", v3:"clicked", hi:"क्लिक करना / खटकना"},
+  {v1:"climb", v2:"climbed", v3:"climbed", hi:"चढ़ना"},
+  {v1:"cling", v2:"clung", v3:"clung", hi:"चिपकना"},
+  {v1:"close", v2:"closed", v3:"closed", hi:"बंद करना"},
+  {v1:"coach", v2:"coached", v3:"coached", hi:"प्रशिक्षण देना"},
+  {v1:"collect", v2:"collected", v3:"collected", hi:"इकट्ठा करना"},
+  {v1:"color", v2:"colored", v3:"colored", hi:"रंगना"},
+  {v1:"comb", v2:"combed", v3:"combed", hi:"कंघी करना"},
+  {v1:"come", v2:"came", v3:"come", hi:"आना"},
+  {v1:"comfort", v2:"comforted", v3:"comforted", hi:"आराम देना"},
+  {v1:"command", v2:"commanded", v3:"commanded", hi:"आदेश देना"},
+  {v1:"communicate", v2:"communicated", v3:"communicated", hi:"संवाद करना"},
+  {v1:"compare", v2:"compared", v3:"compared", hi:"तुलना करना"},
+  {v1:"compete", v2:"competed", v3:"competed", hi:"प्रतिस्पर्धा करना"},
+  {v1:"complain", v2:"complained", v3:"complained", hi:"शिकायत करना"},
+  {v1:"complete", v2:"completed", v3:"completed", hi:"पूरा करना"},
+  {v1:"concentrate", v2:"concentrated", v3:"concentrated", hi:"ध्यान केंद्रित करना"},
+  {v1:"concern", v2:"concerned", v3:"concerned", hi:"चिंतित करना"},
+  {v1:"confess", v2:"confessed", v3:"confessed", hi:"कबूल करना"},
+  {v1:"confirm", v2:"confirmed", v3:"confirmed", hi:"पुष्टि करना"},
+  {v1:"confuse", v2:"confused", v3:"confused", hi:"उलझन में डालना"},
+  {v1:"connect", v2:"connected", v3:"connected", hi:"जोड़ना"},
+  {v1:"consider", v2:"considered", v3:"considered", hi:"विचार करना"},
+  {v1:"consist", v2:"consisted", v3:"consisted", hi:"शामिल होना"},
+  {v1:"contain", v2:"contained", v3:"contained", hi:"शामिल रखना"},
+  {v1:"continue", v2:"continued", v3:"continued", hi:"जारी रखना"},
+  {v1:"control", v2:"controlled", v3:"controlled", hi:"नियंत्रण करना"},
+  {v1:"cook", v2:"cooked", v3:"cooked", hi:"खाना पकाना"},
+  {v1:"copy", v2:"copied", v3:"copied", hi:"नकल करना"},
+  {v1:"correct", v2:"corrected", v3:"corrected", hi:"सही करना"},
+  {v1:"cost", v2:"cost", v3:"cost", hi:"कीमत होना"},
+  {v1:"cough", v2:"coughed", v3:"coughed", hi:"खांसना"},
+  {v1:"count", v2:"counted", v3:"counted", hi:"गिनना"},
+  {v1:"cover", v2:"covered", v3:"covered", hi:"ढकना"},
+  {v1:"crack", v2:"cracked", v3:"cracked", hi:"चटकना / तोड़ना"},
+  {v1:"crash", v2:"crashed", v3:"crashed", hi:"टकराना / दुर्घटनाग्रस्त होना"},
+  {v1:"crawl", v2:"crawled", v3:"crawled", hi:"रेंगना"},
+  {v1:"create", v2:"created", v3:"created", hi:"निर्माण करना / बनाना"},
+  {v1:"creep", v2:"crept", v3:"crept", hi:"चुपके से खिसकना"},
+  {v1:"criticize", v2:"criticized", v3:"criticized", hi:"आलोचना करना"},
+  {v1:"cross", v2:"crossed", v3:"crossed", hi:"पार करना"},
+  {v1:"crush", v2:"crushed", v3:"crushed", hi:"कुचलना"},
+  {v1:"cry", v2:"cried", v3:"cried", hi:"रोना / चिल्लाना"},
+  {v1:"weep", v2:"wept", v3:"wept", hi:"रोना / विलाप करना"},
+  {v1:"cure", v2:"cured", v3:"cured", hi:"इलाज करना"},
+  {v1:"curl", v2:"curled", v3:"curled", hi:"घुंघराला बनाना / मुड़ना"},
+  {v1:"curve", v2:"curved", v3:"curved", hi:"मोड़ना"},
+  {v1:"cut", v2:"cut", v3:"cut", hi:"काटना"},
+  {v1:"cycle", v2:"cycled", v3:"cycled", hi:"साइकिल चलाना"},
+  {v1:"damage", v2:"damaged", v3:"damaged", hi:"नुकसान पहुँचाना"},
+  {v1:"dance", v2:"danced", v3:"danced", hi:"नाचना"},
+  {v1:"dare", v2:"dared", v3:"dared", hi:"हिम्मत करना"},
+  {v1:"deal", v2:"dealt", v3:"dealt", hi:"सौदा करना / निपटना"},
+  {v1:"decay", v2:"decayed", v3:"decayed", hi:"सड़ना"},
+  {v1:"deceive", v2:"deceived", v3:"deceived", hi:"धोखा देना"},
+  {v1:"decide", v2:"decided", v3:"decided", hi:"निर्णय लेना"},
+  {v1:"declare", v2:"declared", v3:"declared", hi:"घोषणा करना"},
+  {v1:"decorate", v2:"decorated", v3:"decorated", hi:"सजाना"},
+  {v1:"decrease", v2:"decreased", v3:"decreased", hi:"कम करना / घटना"},
+  {v1:"defeat", v2:"defeated", v3:"defeated", hi:"हराना"},
+  {v1:"defend", v2:"defended", v3:"defended", hi:"रक्षा करना"},
+  {v1:"delay", v2:"delayed", v3:"delayed", hi:"देरी करना"},
+  {v1:"delete", v2:"deleted", v3:"deleted", hi:"मिटाना"},
+  {v1:"deliver", v2:"delivered", v3:"delivered", hi:"पहुँचाना / वितरण करना"},
+  {v1:"demand", v2:"demanded", v3:"demanded", hi:"माँग करना"},
+  {v1:"deny", v2:"denied", v3:"denied", hi:"इंकार करना"},
+  {v1:"depend", v2:"depended", v3:"depended", hi:"निर्भर होना"},
+  {v1:"describe", v2:"described", v3:"described", hi:"वर्णन करना"},
+  {v1:"deserve", v2:"deserved", v3:"deserved", hi:"योग्य होना"},
+  {v1:"destroy", v2:"destroyed", v3:"destroyed", hi:"नष्ट करना"},
+  {v1:"determine", v2:"determined", v3:"determined", hi:"निर्धारित करना"},
+  {v1:"develop", v2:"developed", v3:"developed", hi:"विकसित करना"},
+  {v1:"die", v2:"died", v3:"died", hi:"मरना"},
+  {v1:"differ", v2:"differed", v3:"differed", hi:"अलग होना"},
+  {v1:"dig", v2:"dug", v3:"dug", hi:"खोदना"},
+  {v1:"digest", v2:"digested", v3:"digested", hi:"पचाना"},
+  {v1:"direct", v2:"directed", v3:"directed", hi:"निर्देशित करना"},
+  {v1:"disagree", v2:"disagreed", v3:"disagreed", hi:"असहमत होना"},
+  {v1:"disappear", v2:"disappeared", v3:"disappeared", hi:"गायब होना"},
+  {v1:"disappoint", v2:"disappointed", v3:"disappointed", hi:"निराश करना"},
+  {v1:"discover", v2:"discovered", v3:"discovered", hi:"खोज करना"},
+  {v1:"discuss", v2:"discussed", v3:"discussed", hi:"चर्चा करना"},
+  {v1:"dislike", v2:"disliked", v3:"disliked", hi:"नापसंद करना"},
+  {v1:"divide", v2:"divided", v3:"divided", hi:"बाँटना / विभाजित करना"},
+  {v1:"do", v2:"did", v3:"done", hi:"करना"},
+  {v1:"doubt", v2:"doubted", v3:"doubted", hi:"संदेह करना"},
+  {v1:"drag", v2:"dragged", v3:"dragged", hi:"खींचना / घसीटना"},
+  {v1:"draw", v2:"drew", v3:"drawn", hi:"चित्र बनाना / खींचना"},
+  {v1:"dream", v2:"dreamt", v3:"dreamt", hi:"सपना देखना"},
+  {v1:"dress", v2:"dressed", v3:"dressed", hi:"कपड़े पहनना"},
+  {v1:"drill", v2:"drilled", v3:"drilled", hi:"छेद करना / अभ्यास करना"},
+  {v1:"drink", v2:"drank", v3:"drunk", hi:"पीना"},
+  {v1:"drive", v2:"drove", v3:"driven", hi:"गाड़ी चलाना"},
+  {v1:"drop", v2:"dropped", v3:"dropped", hi:"गिराना / छोड़ना"},
+  {v1:"dry", v2:"dried", v3:"dried", hi:"सूखना / सुखाना"},
+  {v1:"dust", v2:"dusted", v3:"dusted", hi:"धूल झाड़ना"},
+  {v1:"earn", v2:"earned", v3:"earned", hi:"कमाना"},
+  {v1:"eat", v2:"ate", v3:"eaten", hi:"खाना"},
+  {v1:"educate", v2:"educated", v3:"educated", hi:"शिक्षित करना"},
+  {v1:"elect", v2:"elected", v3:"elected", hi:"चुनना / निर्वाचित करना"},
+  {v1:"embarrass", v2:"embarrassed", v3:"embarrassed", hi:"शर्मिंदा करना"},
+  {v1:"employ", v2:"employed", v3:"employed", hi:"रोजगार देना"},
+  {v1:"empty", v2:"emptied", v3:"emptied", hi:"खाली करना"},
+  {v1:"encourage", v2:"encouraged", v3:"encouraged", hi:"प्रोत्साहित करना"},
+  {v1:"end", v2:"ended", v3:"ended", hi:"समाप्त करना"},
+  {v1:"enjoy", v2:"enjoyed", v3:"enjoyed", hi:"आनंद लेना"},
+  {v1:"enter", v2:"entered", v3:"entered", hi:"प्रवेश करना"},
+  {v1:"entertain", v2:"entertained", v3:"entertained", hi:"मनोरंजन करना"},
+  {v1:"escape", v2:"escaped", v3:"escaped", hi:"बच निकलना"},
+  {v1:"estimate", v2:"estimated", v3:"estimated", hi:"अनुमान लगाना"},
+  {v1:"examine", v2:"examined", v3:"examined", hi:"जांचना"},
+  {v1:"excite", v2:"excited", v3:"excited", hi:"उत्तेजित करना"},
+  {v1:"excuse", v2:"excused", v3:"excused", hi:"क्षमा करना"},
+  {v1:"exercise", v2:"exercised", v3:"exercised", hi:"व्यायाम करना"},
+  {v1:"exist", v2:"existed", v3:"existed", hi:"अस्तित्व में होना"},
+  {v1:"expand", v2:"expanded", v3:"expanded", hi:"विस्तार करना"},
+  {v1:"expect", v2:"expected", v3:"expected", hi:"उम्मीद करना"},
+  {v1:"explain", v2:"explained", v3:"explained", hi:"समझाना"},
+  {v1:"explode", v2:"exploded", v3:"exploded", hi:"विस्फोट होना"},
+  {v1:"extend", v2:"extended", v3:"extended", hi:"बढ़ाना"},
+  {v1:"face", v2:"faced", v3:"faced", hi:"सामना करना"},
+  {v1:"fade", v2:"faded", v3:"faded", hi:"फीका पड़ना"},
+  {v1:"fail", v2:"failed", v3:"failed", hi:"असफल होना"},
+  {v1:"fall", v2:"fell", v3:"fallen", hi:"गिरना"},
+  {v1:"fasten", v2:"fastened", v3:"fastened", hi:"बांधना / जकड़ना"},
+  {v1:"fear", v2:"feared", v3:"feared", hi:"डरना"},
+  {v1:"feed", v2:"fed", v3:"fed", hi:"खिलाना"},
+  {v1:"feel", v2:"felt", v3:"felt", hi:"महसूस करना"},
+  {v1:"fetch", v2:"fetched", v3:"fetched", hi:"जाकर लाना"},
+  {v1:"fight", v2:"fought", v3:"fought", hi:"लड़ना"},
+  {v1:"fill", v2:"filled", v3:"filled", hi:"भरना"},
+  {v1:"find", v2:"found", v3:"found", hi:"पाना / ढूँढना"},
+  {v1:"finish", v2:"finished", v3:"finished", hi:"समाप्त करना"},
+  {v1:"fire", v2:"fired", v3:"fired", hi:"आग लगाना / नौकरी से निकालना"},
+  {v1:"fit", v2:"fit", v3:"fit", hi:"योग्य होना / ठीक बैठना"},
+  {v1:"fix", v2:"fixed", v3:"fixed", hi:"ठीक करना / तय करना"},
+  {v1:"flap", v2:"flapped", v3:"flapped", hi:"फड़फड़ाना"},
+  {v1:"flash", v2:"flashed", v3:"flashed", hi:"चमकना"},
+  {v1:"flee", v2:"fled", v3:"fled", hi:"भाग जाना"},
+  {v1:"float", v2:"floated", v3:"floated", hi:"तैरना (हवा या पानी में)"},
+  {v1:"flow", v2:"flowed", v3:"flowed", hi:"बहना"},
+  {v1:"fly", v2:"flew", v3:"flown", hi:"उड़ना / उड़ाना"},
+  {v1:"fold", v2:"folded", v3:"folded", hi:"मोड़ना / तह करना"},
+  {v1:"follow", v2:"followed", v3:"followed", hi:"पीछा करना / अनुसरण करना"},
+  {v1:"fool", v2:"fooled", v3:"fooled", hi:"मूर्ख बनाना"},
+  {v1:"forbid", v2:"forbade", v3:"forbidden", hi:"मना करना"},
+  {v1:"force", v2:"forced", v3:"forced", hi:"मजबूर करना"},
+  {v1:"forecast", v2:"forecast", v3:"forecast", hi:"पूर्वानुमान लगाना"},
+  {v1:"forget", v2:"forgot", v3:"forgotten", hi:"भूलना"},
+  {v1:"forgive", v2:"forgave", v3:"forgiven", hi:"क्षमा करना"},
+  {v1:"form", v2:"formed", v3:"formed", hi:"रूप देना / बनाना"},
+  {v1:"found", v2:"founded", v3:"founded", hi:"स्थापना करना"},
+  {v1:"frame", v2:"framed", v3:"framed", hi:"ढांचा बनाना / फंसाना"},
+  {v1:"freeze", v2:"froze", v3:"frozen", hi:"जमना / जमाना"},
+  {v1:"frighten", v2:"frightened", v3:"frightened", hi:"डराना"},
+  {v1:"fry", v2:"fried", v3:"fried", hi:"तलना"},
+  {v1:"gather", v2:"gathered", v3:"gathered", hi:"इकट्ठा करना"},
+  {v1:"gaze", v2:"gazed", v3:"gazed", hi:"घूरना"},
+  {v1:"generate", v2:"generated", v3:"generated", hi:"उत्पन्न करना"},
+  {v1:"get", v2:"got", v3:"gotten", hi:"पाना / प्राप्त करना"},
+  {v1:"give", v2:"gave", v3:"given", hi:"देना"},
+  {v1:"glow", v2:"glowed", v3:"glowed", hi:"चमकना"},
+  {v1:"glue", v2:"glued", v3:"glued", hi:"चिपकाना"},
+  {v1:"go", v2:"went", v3:"gone", hi:"जाना"},
+  {v1:"grab", v2:"grabbed", v3:"grabbed", hi:"झपटना / पकड़ना"},
+  {v1:"grant", v2:"granted", v3:"granted", hi:"प्रदान करना / मानना"},
+  {v1:"greet", v2:"greeted", v3:"greeted", hi:"अभिवादन करना"},
+  {v1:"grind", v2:"ground", v3:"ground", hi:"पीसना"},
+  {v1:"grip", v2:"gripped", v3:"gripped", hi:"कसकर पकड़ना"},
+  {v1:"grow", v2:"grew", v3:"grown", hi:"बढ़ना / उगाना"},
+  {v1:"guard", v2:"guarded", v3:"guarded", hi:"पहरेदारी करना"},
+  {v1:"guess", v2:"guessed", v3:"guessed", hi:"अनुमान लगाना"},
+  {v1:"guide", v2:"guided", v3:"guided", hi:"मार्गदर्शन करना"},
+  {v1:"hammer", v2:"hammered", v3:"hammered", hi:"हथौड़ा मारना"},
+  {v1:"hand", v2:"handed", v3:"handed", hi:"हाथ में देना"},
+  {v1:"handle", v2:"handled", v3:"handled", hi:"संभालना"},
+  {v1:"hang", v2:"hung", v3:"hung", hi:"लटकाना"},
+  {v1:"happen", v2:"happened", v3:"happened", hi:"घटित होना"},
+  {v1:"harm", v2:"harmed", v3:"harmed", hi:"नुकसान पहुँचाना"},
+  {v1:"hate", v2:"hated", v3:"hated", hi:"घृणा करना"},
+  {v1:"have", v2:"had", v3:"had", hi:"पास होना / रखना"},
+  {v1:"head", v2:"headed", v3:"headed", hi:"नेतृत्व करना / आगे बढ़ना"},
+  {v1:"heal", v2:"healed", v3:"healed", hi:"घाव भरना"},
+  {v1:"hear", v2:"heard", v3:"heard", hi:"सुनना"},
+  {v1:"heat", v2:"heated", v3:"heated", hi:"गर्म करना"},
+  {v1:"help", v2:"helped", v3:"helped", hi:"मदद करना"},
+  {v1:"hide", v2:"hid", v3:"hidden", hi:"छिपाना / छिपना"},
+  {v1:"hire", v2:"hired", v3:"hired", hi:"किराए पर लेना"},
+  {v1:"hit", v2:"hit", v3:"hit", hi:"प्रहार करना"},
+  {v1:"hold", v2:"held", v3:"held", hi:"पकड़ना / थामना"},
+  {v1:"hook", v2:"hooked", v3:"hooked", hi:"फंसाना"},
+  {v1:"hope", v2:"hoped", v3:"hoped", hi:"आशा करना"},
+  {v1:"hover", v2:"hovered", v3:"hovered", hi:"मंडराना"},
+  {v1:"hug", v2:"hugged", v3:"hugged", hi:"गले लगाना"},
+  {v1:"hum", v2:"hummed", v3:"hummed", hi:"गुनगुनाना"},
+  {v1:"hunt", v2:"hunted", v3:"hunted", hi:"शिकार करना"},
+  {v1:"hurry", v2:"hurried", v3:"hurried", hi:"जल्दी करना"},
+  {v1:"hurt", v2:"hurt", v3:"hurt", hi:"चोट पहुँचाना"},
+  {v1:"identify", v2:"identified", v3:"identified", hi:"पहचानना"},
+  {v1:"ignore", v2:"ignored", v3:"ignored", hi:"अनदेखा करना"},
+  {v1:"imagine", v2:"imagined", v3:"imagined", hi:"कल्पना करना"},
+  {v1:"impress", v2:"impressed", v3:"impressed", hi:"प्रभावित करना"},
+  {v1:"improve", v2:"improved", v3:"improved", hi:"सुधारना"},
+  {v1:"include", v2:"included", v3:"included", hi:"शामिल करना"},
+  {v1:"increase", v2:"increased", v3:"increased", hi:"बढ़ाना"},
+  {v1:"indicate", v2:"indicated", v3:"indicated", hi:"संकेत देना"},
+  {v1:"influence", v2:"influenced", v3:"influenced", hi:"प्रभाव डालना"},
+  {v1:"inform", v2:"informed", v3:"informed", hi:"सूचित करना"},
+  {v1:"inject", v2:"injected", v3:"injected", hi:"सुई लगाना"},
+  {v1:"injure", v2:"injured", v3:"injured", hi:"घायल करना"},
+  {v1:"insert", v2:"inserted", v3:"inserted", hi:"डालना / सम्मिलित करना"},
+  {v1:"insist", v2:"insisted", v3:"insisted", hi:"जिद करना / जोर देना"},
+  {v1:"inspect", v2:"inspected", v3:"inspected", hi:"निरीक्षण करना"},
+  {v1:"inspire", v2:"inspired", v3:"inspired", hi:"प्रेरित करना"},
+  {v1:"install", v2:"installed", v3:"installed", hi:"स्थापित करना"},
+  {v1:"instruct", v2:"instructed", v3:"instructed", hi:"निर्देश देना"},
+  {v1:"insult", v2:"insulted", v3:"insulted", hi:"अपमान करना"},
+  {v1:"intend", v2:"intended", v3:"intended", hi:"इरादा रखना"},
+  {v1:"interest", v2:"interested", v3:"interested", hi:"दिलचस्पी लेना"},
+  {v1:"interfere", v2:"interfered", v3:"interfered", hi:"दखल देना"},
+  {v1:"interrupt", v2:"interrupted", v3:"interrupted", hi:"बाधा डालना"},
+  {v1:"introduce", v2:"introduced", v3:"introduced", hi:"परिचय कराना"},
+  {v1:"invent", v2:"invented", v3:"invented", hi:"आविष्कार करना"},
+  {v1:"invite", v2:"invited", v3:"invited", hi:"आमंत्रित करना"},
+  {v1:"irritate", v2:"irritated", v3:"irritated", hi:"चिढ़ाना"},
+  {v1:"itch", v2:"itched", v3:"itched", hi:"खुजली होना"},
+  {v1:"jail", v2:"jailed", v3:"jailed", hi:"जेल भेजना"},
+  {v1:"jog", v2:"jogged", v3:"jogged", hi:"धीमे दौड़ना"},
+  {v1:"join", v2:"joined", v3:"joined", hi:"जुड़ना / शामिल होना"},
+  {v1:"joke", v2:"joked", v3:"joked", hi:"मजाक करना"},
+  {v1:"judge", v2:"judged", v3:"judged", hi:"न्याय करना / परखना"},
+  {v1:"juggle", v2:"juggled", v3:"juggled", hi:"हाथ की सफाई दिखाना"},
+  {v1:"jump", v2:"jumped", v3:"jumped", hi:"कूदना"},
+  {v1:"justify", v2:"justified", v3:"justified", hi:"सही ठहराना"},
+  {v1:"keep", v2:"kept", v3:"kept", hi:"रखना"},
+  {v1:"kick", v2:"kicked", v3:"kicked", hi:"लात मारना"},
+  {v1:"kill", v2:"killed", v3:"killed", hi:"जान से मारना"},
+  {v1:"kiss", v2:"kissed", v3:"kissed", hi:"चूमना"},
+  {v1:"kneel", v2:"knelt", v3:"knelt", hi:"घुटने टेकना"},
+  {v1:"knit", v2:"knit", v3:"knit", hi:"बुनना"},
+  {v1:"knock", v2:"knocked", v3:"knocked", hi:"खटखटाना"},
+  {v1:"knot", v2:"knotted", v3:"knotted", hi:"गांठ बांधना"},
+  {v1:"know", v2:"knew", v3:"known", hi:"जानना"},
+  {v1:"label", v2:"labeled", v3:"labeled", hi:"चिह्न लगाना"},
+  {v1:"lack", v2:"lacked", v3:"lacked", hi:"कमी होना"},
+  {v1:"land", v2:"landed", v3:"landed", hi:"उतरना"},
+  {v1:"last", v2:"lasted", v3:"lasted", hi:"टिकना"},
+  {v1:"laugh", v2:"laughed", v3:"laughed", hi:"हँसना"},
+  {v1:"launch", v2:"launched", v3:"launched", hi:"शुरू करना / लॉन्च करना"},
+  {v1:"lay", v2:"laid", v3:"laid", hi:"लिटाना / अंडे देना"},
+  {v1:"lead", v2:"led", v3:"led", hi:"नेतृत्व करना"},
+  {v1:"leak", v2:"leaked", v3:"leaked", hi:"रिसना"},
+  {v1:"lean", v2:"leant", v3:"leant", hi:"झुकना"},
+  {v1:"learn", v2:"learnt", v3:"learnt", hi:"सीखना"},
+  {v1:"leave", v2:"left", v3:"left", hi:"छोड़ना / प्रस्थान करना"},
+  {v1:"lecture", v2:"lectured", v3:"lectured", hi:"भाषण देना"},
+  {v1:"lend", v2:"lent", v3:"lent", hi:"उधार देना"},
+  {v1:"let", v2:"let", v3:"let", hi:"अनुमति देना / होने देना"},
+  {v1:"level", v2:"leveled", v3:"leveled", hi:"समतल करना"},
+  {v1:"license", v2:"licensed", v3:"licensed", hi:"अनुज्ञा पत्र देना"},
+  {v1:"lick", v2:"licked", v3:"licked", hi:"चाटना"},
+  {v1:"lie", v2:"lay", v3:"lain", hi:"लेटना"},
+  {v1:"lie", v2:"lied", v3:"lied", hi:"झूठ बोलना"},
+  {v1:"lift", v2:"lifted", v3:"lifted", hi:"उठाना"},
+  {v1:"light", v2:"lit", v3:"lit", hi:"रोशनी करना / जलाना"},
+  {v1:"like", v2:"liked", v3:"liked", hi:"पसंद करना"},
+  {v1:"link", v2:"linked", v3:"linked", hi:"जोड़ना"},
+  {v1:"listen", v2:"listened", v3:"listened", hi:"ध्यान से सुनना"},
+  {v1:"live", v2:"lived", v3:"lived", hi:"रहना / जीना"},
+  {v1:"load", v2:"loaded", v3:"loaded", hi:"लादना / भरना"},
+  {v1:"lock", v2:"locked", v3:"locked", hi:"ताला लगाना"},
+  {v1:"look", v2:"looked", v3:"looked", hi:"देखना"},
+  {v1:"lose", v2:"lost", v3:"lost", hi:"खोना / हारना"},
+  {v1:"love", v2:"loved", v3:"loved", hi:"प्यार करना"},
+  {v1:"maintain", v2:"maintained", v3:"maintained", hi:"बनाए रखना"},
+  {v1:"make", v2:"made", v3:"made", hi:"बनाना"},
+  {v1:"manage", v2:"managed", v3:"managed", hi:"प्रबंध करना"},
+  {v1:"march", v2:"marched", v3:"marched", hi:"मार्च करना / कदमताल"},
+  {v1:"mark", v2:"marked", v3:"marked", hi:"निशान लगाना"},
+  {v1:"marry", v2:"married", v3:"married", hi:"शादी करना"},
+  {v1:"match", v2:"matched", v3:"matched", hi:"मेल खाना"},
+  {v1:"matter", v2:"mattered", v3:"mattered", hi:"महत्व रखना"},
+  {v1:"mean", v2:"meant", v3:"meant", hi:"मतलब होना"},
+  {v1:"measure", v2:"measured", v3:"measured", hi:"मापना"},
+  {v1:"meet", v2:"met", v3:"met", hi:"मिलना"},
+  {v1:"melt", v2:"melted", v3:"melted", hi:"पिघलना"},
+  {v1:"memorize", v2:"memorized", v3:"memorized", hi:"याद करना"},
+  {v1:"mend", v2:"mended", v3:"mended", hi:"सुधारना / मरम्मत करना"},
+  {v1:"mention", v2:"mentioned", v3:"mentioned", hi:"जिक्र करना"},
+  {v1:"mind", v2:"minded", v3:"minded", hi:"बुरा मानना / ध्यान देना"},
+  {v1:"miss", v2:"missed", v3:"missed", hi:"चूकना / याद करना"},
+  {v1:"mix", v2:"mixed", v3:"mixed", hi:"मिलाना"},
+  {v1:"moan", v2:"moaned", v3:"moaned", hi:"कराहना"},
+  {v1:"mock", v2:"mocked", v3:"mocked", hi:"मजाक उड़ाना"},
+  {v1:"mourn", v2:"mourned", v3:"mourned", hi:"शोक मनाना"},
+  {v1:"move", v2:"moved", v3:"moved", hi:"हिलना / खिसकना"},
+  {v1:"multiply", v2:"multiplied", v3:"multiplied", hi:"गुणा करना"},
+  {v1:"murder", v2:"murdered", v3:"murdered", hi:"हत्या करना"},
+  {v1:"nail", v2:"nailed", v3:"nailed", hi:"कील ठोकना"},
+  {v1:"name", v2:"named", v3:"named", hi:"नाम रखना"},
+  {v1:"need", v2:"needed", v3:"needed", hi:"आवश्यकता होना"},
+  {v1:"nest", v2:"nested", v3:"nested", hi:"घोंसला बनाना"},
+  {v1:"nod", v2:"nodded", v3:"nodded", hi:"सिर हिलाना (हाँ में)"},
+  {v1:"note", v2:"noted", v3:"noted", hi:"ध्यान देना / लिखना"},
+  {v1:"notice", v2:"noticed", v3:"noticed", hi:"ध्यान देना"},
+  {v1:"number", v2:"numbered", v3:"numbered", hi:"गिनना / संख्या डालना"},
+  {v1:"obey", v2:"obeyed", v3:"obeyed", hi:"आज्ञा मानना"},
+  {v1:"object", v2:"objected", v3:"objected", hi:"आपत्ति करना"},
+  {v1:"observe", v2:"observed", v3:"observed", hi:"निरीक्षण करना"},
+  {v1:"obtain", v2:"obtained", v3:"obtained", hi:"प्राप्त करना"},
+  {v1:"occur", v2:"occurred", v3:"occurred", hi:"घटित होना"},
+  {v1:"offend", v2:"offended", v3:"offended", hi:"नाराज़ करना"},
+  {v1:"offer", v2:"offered", v3:"offered", hi:"प्रस्ताव देना"},
+  {v1:"open", v2:"opened", v3:"opened", hi:"खोलना"},
+  {v1:"operate", v2:"operated", v3:"operated", hi:"संचालित करना / ऑपरेशन करना"},
+  {v1:"oppose", v2:"opposed", v3:"opposed", hi:"विरोध करना"},
+  {v1:"order", v2:"ordered", v3:"ordered", hi:"आदेश देना"},
+  {v1:"organize", v2:"organized", v3:"organized", hi:"आयोजित करना"},
+  {v1:"overcome", v2:"overcame", v3:"overcome", hi:"काबू पाना"},
+  {v1:"owe", v2:"owed", v3:"owed", hi:"ऋणी होना"},
+  {v1:"own", v2:"owned", v3:"owned", hi:"मालिक होना"},
+  {v1:"pack", v2:"packed", v3:"packed", hi:"पैक करना / बाँधना"},
+  {v1:"paint", v2:"painted", v3:"painted", hi:"रंगना"},
+  {v1:"park", v2:"parked", v3:"parked", hi:"खड़ा करना (गाड़ी)"},
+  {v1:"part", v2:"parted", v3:"parted", hi:"अलग होना"},
+  {v1:"participate", v2:"participated", v3:"participated", hi:"भाग लेना"},
+  {v1:"pass", v2:"passed", v3:"passed", hi:"गुजरना / उत्तीर्ण होना"},
+  {v1:"paste", v2:"pasted", v3:"pasted", hi:"चिपकाना"},
+  {v1:"pat", v2:"patted", v3:"patted", hi:"थपथपाना"},
+  {v1:"pause", v2:"paused", v3:"paused", hi:"रुकना"},
+  {v1:"pay", v2:"paid", v3:"paid", hi:"भुगतान करना"},
+  {v1:"peck", v2:"pecked", v3:"pecked", hi:"चोंच मारना"},
+  {v1:"peel", v2:"peeled", v3:"peeled", hi:"छीलना"},
+  {v1:"peep", v2:"peeped", v3:"peeped", hi:"झांकना"},
+  {v1:"perform", v2:"performed", v3:"performed", hi:"प्रदर्शन करना"},
+  {v1:"permit", v2:"permitted", v3:"permitted", hi:"अनुमति देना"},
+  {v1:"persuade", v2:"persuaded", v3:"persuaded", hi:"मनाना / राजी करना"},
+  {v1:"phone", v2:"phoned", v3:"phoned", hi:"फोन करना"},
+  {v1:"pick", v2:"picked", v3:"picked", hi:"चुनना / उठाना"},
+  {v1:"pinch", v2:"pinched", v3:"pinched", hi:"चुटकी काटना"},
+  {v1:"place", v2:"placed", v3:"placed", hi:"रखना / स्थान देना"},
+  {v1:"plan", v2:"planned", v3:"planned", hi:"योजना बनाना"},
+  {v1:"plant", v2:"planted", v3:"planted", hi:"पौधे लगाना"},
+  {v1:"play", v2:"played", v3:"played", hi:"खेलना"},
+  {v1:"plead", v2:"pleaded", v3:"pleaded", hi:"विनती करना"},
+  {v1:"please", v2:"pleased", v3:"pleased", hi:"प्रसन्न करना"},
+  {v1:"plug", v2:"plugged", v3:"plugged", hi:"प्लग लगाना"},
+  {v1:"point", v2:"pointed", v3:"pointed", hi:"इशारा करना"},
+  {v1:"poke", v2:"poked", v3:"poked", hi:"चुभाना / धकेलना"},
+  {v1:"polish", v2:"polished", v3:"polished", hi:"पॉलिश करना"},
+  {v1:"pour", v2:"poured", v3:"poured", hi:"उंडेलना / डालना"},
+  {v1:"practice", v2:"practiced", v3:"practiced", hi:"अभ्यास करना"},
+  {v1:"praise", v2:"praised", v3:"praised", hi:"प्रशंसा करना"},
+  {v1:"pray", v2:"prayed", v3:"prayed", hi:"प्रार्थना करना"},
+  {v1:"predict", v2:"predicted", v3:"predicted", hi:"भविष्यवाणी करना"},
+  {v1:"prefer", v2:"preferred", v3:"preferred", hi:"अधिक पसंद करना"},
+  {v1:"prepare", v2:"prepared", v3:"prepared", hi:"तैयारी करना"},
+  {v1:"present", v2:"presented", v3:"presented", hi:"प्रस्तुत करना / भेंट देना"},
+  {v1:"press", v2:"pressed", v3:"pressed", hi:"दबाना"},
+  {v1:"pretend", v2:"pretended", v3:"pretended", hi:"दिखावा करना"},
+  {v1:"prevent", v2:"prevented", v3:"prevented", hi:"रोकना"},
+  {v1:"print", v2:"printed", v3:"printed", hi:"छापना"},
+  {v1:"produce", v2:"produced", v3:"produced", hi:"उत्पादन करना"},
+  {v1:"promise", v2:"promised", v3:"promised", hi:"वादा करना"},
+  {v1:"protect", v2:"protected", v3:"protected", hi:"रक्षा करना"},
+  {v1:"prove", v2:"proved", v3:"proved", hi:"साबित करना"},
+  {v1:"provide", v2:"provided", v3:"provided", hi:"प्रदान करना"},
+  {v1:"pull", v2:"pulled", v3:"pulled", hi:"खींचना"},
+  {v1:"pump", v2:"pumped", v3:"pumped", hi:"पंप करना"},
+  {v1:"punch", v2:"punched", v3:"punched", hi:"घूंसा मारना"},
+  {v1:"punish", v2:"punished", v3:"punished", hi:"सजा देना"},
+  {v1:"push", v2:"pushed", v3:"pushed", hi:"धक्का देना"},
+  {v1:"put", v2:"put", v3:"put", hi:"रखना"},
+  {v1:"qualify", v2:"qualified", v3:"qualified", hi:"योग्य होना"},
+  {v1:"question", v2:"questioned", v3:"questioned", hi:"प्रश्न करना"},
+  {v1:"quit", v2:"quit", v3:"quit", hi:"छोड़ देना"},
+  {v1:"race", v2:"raced", v3:"raced", hi:"दौड़ लगाना"},
+  {v1:"rain", v2:"rained", v3:"rained", hi:"बारिश होना"},
+  {v1:"raise", v2:"raised", v3:"raised", hi:"उठाना / बढ़ाना"},
+  {v1:"reach", v2:"reached", v3:"reached", hi:"पहुँचना"},
+  {v1:"read", v2:"read", v3:"read", hi:"पढ़ना"},
+  {v1:"realize", v2:"realized", v3:"realized", hi:"एहसास होना"},
+  {v1:"receive", v2:"received", v3:"received", hi:"प्राप्त करना"},
+  {v1:"recognize", v2:"recognized", v3:"recognized", hi:"पहचानना"},
+  {v1:"recommend", v2:"recommended", v3:"recommended", hi:"सिफारिश करना"},
+  {v1:"record", v2:"recorded", v3:"recorded", hi:"दर्ज करना"},
+  {v1:"reduce", v2:"reduced", v3:"reduced", hi:"कम करना"},
+  {v1:"reflect", v2:"reflected", v3:"reflected", hi:"प्रतिबिंबित करना / विचार करना"},
+  {v1:"refuse", v2:"refused", v3:"refused", hi:"इंकार करना"},
+  {v1:"regret", v2:"regretted", v3:"regretted", hi:"पछताना"},
+  {v1:"reject", v2:"rejected", v3:"rejected", hi:"अस्वीकार करना"},
+  {v1:"relax", v2:"relaxed", v3:"relaxed", hi:"आराम करना"},
+  {v1:"release", v2:"released", v3:"released", hi:"छोड़ना / मुक्त करना"},
+  {v1:"rely", v2:"relied", v3:"relied", hi:"भरोसा करना"},
+  {v1:"remain", v2:"remained", v3:"remained", hi:"बाकी रहना"},
+  {v1:"remember", v2:"remembered", v3:"remembered", hi:"याद रखना"},
+  {v1:"remind", v2:"reminded", v3:"reminded", hi:"याद दिलाना"},
+  {v1:"remove", v2:"removed", v3:"removed", hi:"हटाना"},
+  {v1:"repair", v2:"repaired", v3:"repaired", hi:"मरम्मत करना"},
+  {v1:"repeat", v2:"repeated", v3:"repeated", hi:"दोहराना"},
+  {v1:"replace", v2:"replaced", v3:"replaced", hi:"बदलना (स्थान)"},
+  {v1:"reply", v2:"replied", v3:"replied", hi:"जवाब देना"},
+  {v1:"report", v2:"reported", v3:"reported", hi:"रिपोर्ट करना / सूचना देना"},
+  {v1:"reproduce", v2:"reproduced", v3:"reproduced", hi:"प्रजनन करना / नकल करना"},
+  {v1:"request", v2:"requested", v3:"requested", hi:"अनुरोध करना"},
+  {v1:"require", v2:"required", v3:"required", hi:"आवश्यकता होना"},
+  {v1:"rescue", v2:"rescued", v3:"rescued", hi:"बचाना"},
+  {v1:"respect", v2:"respected", v3:"respected", hi:"सम्मान करना"},
+  {v1:"rest", v2:"rested", v3:"rested", hi:"आराम करना"},
+  {v1:"retire", v2:"retired", v3:"retired", hi:"सेवानिवृत्त होना"},
+  {v1:"return", v2:"returned", v3:"returned", hi:"लौटना / वापस करना"},
+  {v1:"rhyme", v2:"rhymed", v3:"rhymed", hi:"तुकबंदी करना"},
+  {v1:"ride", v2:"rode", v3:"ridden", hi:"सवारी करना"},
+  {v1:"ring", v2:"rang", v3:"rung", hi:"बजना / बजाना"},
+  {v1:"rise", v2:"rose", v3:"risen", hi:"उठना / उदय होना"},
+  {v1:"risk", v2:"risked", v3:"risked", hi:"जोखिम उठाना"},
+  {v1:"rob", v2:"robbed", v3:"robbed", hi:"लूटना"},
+  {v1:"rock", v2:"rocked", v3:"rocked", hi:"हिलाना"},
+  {v1:"roll", v2:"rolled", v3:"rolled", hi:"लुढ़कना"},
+  {v1:"rot", v2:"rotted", v3:"rotted", hi:"सड़ना"},
+  {v1:"rub", v2:"rubbed", v3:"rubbed", hi:"रगड़ना"},
+  {v1:"ruin", v2:"ruined", v3:"ruined", hi:"बर्बाद करना"},
+  {v1:"rule", v2:"ruled", v3:"ruled", hi:"शासन करना"},
+  {v1:"run", v2:"ran", v3:"run", hi:"दौड़ना"},
+  {v1:"rush", v2:"rushed", v3:"rushed", hi:"जल्दी करना / भागना"},
+  {v1:"sail", v2:"sailed", v3:"sailed", hi:"जलयात्रा करना"},
+  {v1:"satisfy", v2:"satisfied", v3:"satisfied", hi:"संतुष्ट करना"},
+  {v1:"save", v2:"saved", v3:"saved", hi:"बचाना"},
+  {v1:"saw", v2:"sawed", v3:"sawn", hi:"आरी से काटना"},
+  {v1:"say", v2:"said", v3:"said", hi:"कहना"},
+  {v1:"scare", v2:"scared", v3:"scared", hi:"डराना"},
+  {v1:"scatter", v2:"scattered", v3:"scattered", hi:"बिखेरना"},
+  {v1:"scold", v2:"scolded", v3:"scolded", hi:"डांटना"},
+  {v1:"scorch", v2:"scorched", v3:"scorched", hi:"झुलसाना"},
+  {v1:"scrape", v2:"scraped", v3:"scraped", hi:"खुरचना"},
+  {v1:"scratch", v2:"scratched", v3:"scratched", hi:"खरोंचना"},
+  {v1:"scream", v2:"screamed", v3:"screamed", hi:"चीखना"},
+  {v1:"scrub", v2:"scrubbed", v3:"scrubbed", hi:"रगड़कर साफ करना"},
+  {v1:"seal", v2:"sealed", v3:"sealed", hi:"मुहर लगाना"},
+  {v1:"search", v2:"searched", v3:"searched", hi:"खोजना"},
+  {v1:"see", v2:"saw", v3:"seen", hi:"देखना"},
+  {v1:"seek", v2:"sought", v3:"sought", hi:"खोजना / माँगना"},
+  {v1:"select", v2:"selected", v3:"selected", hi:"चुनना"},
+  {v1:"sell", v2:"sold", v3:"sold", hi:"बेचना"},
+  {v1:"send", v2:"sent", v3:"sent", hi:"भेजना"},
+  {v1:"sense", v2:"sensed", v3:"sensed", hi:"महसूस करना (भाव)"},
+  {v1:"separate", v2:"separated", v3:"separated", hi:"अलग करना"},
+  {v1:"serve", v2:"served", v3:"served", hi:"सेवा करना / परोसना"},
+  {v1:"set", v2:"set", v3:"set", hi:"स्थापित करना / अस्त होना"},
+  {v1:"settle", v2:"settled", v3:"settled", hi:"बसना / तय करना"},
+  {v1:"sew", v2:"sewed", v3:"sewn", hi:"सिलना"},
+  {v1:"shade", v2:"shaded", v3:"shaded", hi:"छाया करना"},
+  {v1:"shake", v2:"shook", v3:"shaken", hi:"हिलाना"},
+  {v1:"shape", v2:"shaped", v3:"shaped", hi:"आकार देना"},
+  {v1:"share", v2:"shared", v3:"shared", hi:"साझा करना"},
+  {v1:"shave", v2:"shaved", v3:"shaved", hi:"दाढ़ी बनाना"},
+  {v1:"shear", v2:"sheared", v3:"shorn", hi:"काटना (ऊन आदि)"},
+  {v1:"shine", v2:"shone", v3:"shone", hi:"चमकना"},
+  {v1:"shiver", v2:"shivered", v3:"shivered", hi:"कांपना"},
+  {v1:"shock", v2:"shocked", v3:"shocked", hi:"झटका लगना / चौंकाना"},
+  {v1:"shoot", v2:"shot", v3:"shot", hi:"गोली मारना"},
+  {v1:"shop", v2:"shopped", v3:"shopped", hi:"खरीदारी करना"},
+  {v1:"shout", v2:"shouted", v3:"shouted", hi:"चिल्लाना"},
+  {v1:"show", v2:"showed", v3:"shown", hi:"दिखाना"},
+  {v1:"shrink", v2:"shrank", v3:"shrunk", hi:"सिकुड़ना"},
+  {v1:"shrug", v2:"shrugged", v3:"shrugged", hi:"कंधे उचकाना"},
+  {v1:"shut", v2:"shut", v3:"shut", hi:"बंद करना"},
+  {v1:"sigh", v2:"sighed", v3:"sighed", hi:"आह भरना"},
+  {v1:"sign", v2:"signed", v3:"signed", hi:"हस्ताक्षर करना"},
+  {v1:"signal", v2:"signaled", v3:"signaled", hi:"संकेत देना"},
+  {v1:"sin", v2:"sinned", v3:"sinned", hi:"पाप करना"},
+  {v1:"sing", v2:"sang", v3:"sung", hi:"गाना"},
+  {v1:"sink", v2:"sank", v3:"sunk", hi:"डूबना (निर्जीव वस्तु)"},
+  {v1:"sip", v2:"sipped", v3:"sipped", hi:"घूंट पीना"},
+  {v1:"sit", v2:"sat", v3:"sat", hi:"बैठना"},
+  {v1:"skate", v2:"skated", v3:"skated", hi:"स्केट करना"},
+  {v1:"skip", v2:"skipped", v3:"skipped", hi:"कूदना / छोड़ देना"},
+  {v1:"slap", v2:"slapped", v3:"slapped", hi:"थप्पड़ मारना"},
+  {v1:"sleep", v2:"slept", v3:"slept", hi:"सोना"},
+  {v1:"slide", v2:"slid", v3:"slid", hi:"फिसलना"},
+  {v1:"slip", v2:"slipped", v3:"slipped", hi:"फिसल जाना"},
+  {v1:"slow", v2:"slowed", v3:"slowed", hi:"धीमा करना"},
+  {v1:"smash", v2:"smashed", v3:"smashed", hi:"चूर-चूर करना"},
+  {v1:"smell", v2:"smelt", v3:"smelt", hi:"सूंघना"},
+  {v1:"smile", v2:"smiled", v3:"smiled", hi:"मुस्कुराना"},
+  {v1:"smoke", v2:"smoked", v3:"smoked", hi:"धूम्रपान करना"},
+  {v1:"snatch", v2:"snatched", v3:"snatched", hi:"छीनना"},
+  {v1:"sneeze", v2:"sneezed", v3:"sneezed", hi:"छींकना"},
+  {v1:"sniff", v2:"sniffed", v3:"sniffed", hi:"सूंघना (आवाज के साथ)"},
+  {v1:"snore", v2:"snored", v3:"snored", hi:"खर्राटे लेना"},
+  {v1:"solve", v2:"solved", v3:"solved", hi:"हल करना"},
+  {v1:"soothe", v2:"soothed", v3:"soothed", hi:"शांत करना"},
+  {v1:"sound", v2:"sounded", v3:"sounded", hi:"आवाज करना / प्रतीत होना"},
+  {v1:"sow", v2:"sowed", v3:"sown", hi:"बीज बोना"},
+  {v1:"spare", v2:"spared", v3:"spared", hi:"बचाना / अतिरिक्त रखना"},
+  {v1:"spark", v2:"sparked", v3:"sparked", hi:"चिंगारी छोड़ना"},
+  {v1:"speak", v2:"spoke", v3:"spoken", hi:"बोलना"},
+  {v1:"spell", v2:"spelt", v3:"spelt", hi:"वर्तनी बताना"},
+  {v1:"spend", v2:"spent", v3:"spent", hi:"खर्च करना / बिताना"},
+  {v1:"spill", v2:"spilt", v3:"spilt", hi:"छलकना / गिराना"},
+  {v1:"spin", v2:"spun", v3:"spun", hi:"घुमाना / कातना"},
+  {v1:"spit", v2:"spat", v3:"spat", hi:"थूकना"},
+  {v1:"split", v2:"split", v3:"split", hi:"विभाजित करना"},
+  {v1:"spoil", v2:"spoilt", v3:"spoilt", hi:"खराब करना"},
+  {v1:"Fart", v2:"Farted", v3:"Farted", hi:"पादना"},
+  {v1:"masturbate", v2:"masturbated", v3:"masturbated", hi:"हस्तमैथुन करना"},
+  {v1:"copulate", v2:"copulated", v3:"copulated", hi:"मैथुन करना / यौन संबंध बनाना / संभोग करना "},
+  
+    {v1:"abandon", v2:"abandoned", v3:"abandoned", hi:"छोड़ देना / त्यागना"},
+  {v1:"abolish", v2:"abolished", v3:"abolished", hi:"समाप्त करना / उन्मूलन करना"},
+  {v1:"accelerate", v2:"accelerated", v3:"accelerated", hi:"गति बढ़ाना"},
+  {v1:"accompany", v2:"accompanied", v3:"accompanied", hi:"साथ जाना / संगत करना"},
+  {v1:"accomplish", v2:"accomplished", v3:"accomplished", hi:"पूरा करना / सिद्ध करना"},
+  {v1:"accumulate", v2:"accumulated", v3:"accumulated", hi:"संचय करना / इकट्ठा करना"},
+  {v1:"acknowledge", v2:"acknowledged", v3:"acknowledged", hi:"स्वीकार करना / मानना"},
+  {v1:"adapt", v2:"adapted", v3:"adapted", hi:"अनुकूल बनाना"},
+  {v1:"administer", v2:"administered", v3:"administered", hi:"प्रबंध करना / प्रशासन करना"},
+  {v1:"adore", v2:"adored", v3:"adored", hi:"बहुत पसंद करना / पूजा करना"},
+  {v1:"advance", v2:"advanced", v3:"advanced", hi:"आगे बढ़ना / उन्नत करना"},
+  {v1:"advertise", v2:"advertised", v3:"advertised", hi:"विज्ञापन देना"},
+  {v1:"affect", v2:"affected", v3:"affected", hi:"प्रभावित करना"},
+  {v1:"alert", v2:"alerted", v3:"alerted", hi:"चेतावनी देना / सतर्क करना"},
+  {v1:"allocate", v2:"allocated", v3:"allocated", hi:"आवंटित करना / बाँटना"},
+  {v1:"amend", v2:"amended", v3:"amended", hi:"संशोधन करना / सुधारना"},
+  {v1:"anticipate", v2:"anticipated", v3:"anticipated", hi:"पूर्वानुमान करना / आशा करना"},
+  {v1:"applaud", v2:"applauded", v3:"applauded", hi:"सराहना करना / ताली बजाना"},
+  {v1:"appoint", v2:"appointed", v3:"appointed", hi:"नियुक्त करना"},
+  {v1:"arouse", v2:"aroused", v3:"aroused", hi:"जगाना / उत्तेजित करना"},
+  {v1:"assemble", v2:"assembled", v3:"assembled", hi:"इकट्ठा करना / पुर्जे जोड़ना"},
+  {v1:"assert", v2:"asserted", v3:"asserted", hi:"दावा करना / जोर देकर कहना"},
+  {v1:"assign", v2:"assigned", v3:"assigned", hi:"सौंपना / कार्य देना"},
+  {v1:"assure", v2:"assured", v3:"assured", hi:"आश्वासन देना / भरोसा दिलाना"},
+  {v1:"astonish", v2:"astonished", v3:"astonished", hi:"आश्चर्यचकित करना"},
+  {v1:"attain", v2:"attained", v3:"attained", hi:"प्राप्त करना / हासिल करना"},
+  {v1:"audit", v2:"audited", v3:"audited", hi:"लेखा-जोखा करना"},
+  {v1:"authorize", v2:"authorized", v3:"authorized", hi:"अधिकार देना / अधिकृत करना"},
+  {v1:"back", v2:"backed", v3:"backed", hi:"समर्थन करना / पीछे हटना"},
+  {v1:"banish", v2:"banished", v3:"banished", hi:"निर्वासित करना / देश निकाला देना"},
+  {v1:"bargain", v2:"bargained", v3:"bargained", hi:"मोलभाव करना / सौदा करना"},
+  {v1:"bat", v2:"batted", v3:"batted", hi:"बल्लेबाजी करना"},
+  {v1:"beam", v2:"beamed", v3:"beamed", hi:"मुस्कुराना / प्रकाश डालना"},
+  {v1:"behold", v2:"beheld", v3:"beheld", hi:"निहारना / ध्यान से देखना"},
+  {v1:"benefit", v2:"benefited", v3:"benefited", hi:"लाभ पहुँचाना / फायदा होना"},
+  {v1:"bid", v2:"bid", v3:"bid", hi:"बोली लगाना"},
+  {v1:"blame", v2:"blamed", v3:"blamed", hi:"दोष देना / आरोप लगाना"},
+  {v1:"blast", v2:"blasted", v3:"blasted", hi:"विस्फोट करना / धमाका करना"},
+  {v1:"blend", v2:"blended", v3:"blended", hi:"मिलाना / मिश्रण करना"},
+  {v1:"bloom", v2:"bloomed", v3:"bloomed", hi:"खिलना (फूल)"},
+  {v1:"blossom", v2:"blossomed", v3:"blossomed", hi:"विकसित होना / खिलना"},
+  {v1:"blush", v2:"blushed", v3:"blushed", hi:"शर्माना / चेहरा लाल होना"},
+  {v1:"board", v2:"boarded", v3:"boarded", hi:"सवार होना (ट्रेन या विमान आदि में)"},
+  {v1:"bomb", v2:"bombed", v3:"bombed", hi:"बम गिराना"},
+  {v1:"boost", v2:"boosted", v3:"boosted", hi:"बढ़ावा देना / वृद्धि करना"},
+  {v1:"bounce", v2:"bounced", v3:"bounced", hi:"उछलना / वापस लौटना"},
+  {v1:"brag", v2:"bragged", v3:"bragged", hi:"डींग मारना / शेखी बघारना"},
+  {v1:"brake", v2:"braked", v3:"braked", hi:"ब्रेक लगाना / गति रोकना"},
+  {v1:"branch", v2:"branched", v3:"branched", hi:"शाखाओं में बटना / विभाजित होना"},
+  {v1:"breed", v2:"bred", v3:"bred", hi:"नस्ल बढ़ाना / पैदा करना"},
+  {v1:"bribe", v2:"bribed", v3:"bribed", hi:"रिश्वत देना / घूस देना"},
+  {v1:"broaden", v2:"broadened", v3:"broadened", hi:"चौड़ा करना / विस्तार करना"},
+  {v1:"bubble", v2:"bubbled", v3:"bubbled", hi:"बुलबुले उठना / उबलना"},
+  {v1:"bump", v2:"bumped", v3:"bumped", hi:"टकराना"},
+  {v1:"cancel", v2:"canceled", v3:"canceled", hi:"रद्द करना / निरस्त करना"},
+  {v1:"capture", v2:"captured", v3:"captured", hi:"कब्जा करना / पकड़ना"},
+  {v1:"cast", v2:"cast", v3:"cast", hi:"डालना / फेंकना / भूमिका देना"},
+  {v1:"cease", v2:"ceased", v3:"ceased", hi:"रोकना / समाप्त होना"},
+  {v1:"certify", v2:"certified", v3:"certified", hi:"प्रमाणित करना"},
+  {v1:"characterize", v2:"characterized", v3:"characterized", hi:"विशेषता बताना / वर्णन करना"},
+  {v1:"choke", v2:"choked", v3:"choked", hi:"गला घोंटना / दम घुटना"},
+  {v1:"circulate", v2:"circulated", v3:"circulated", hi:"प्रसारित करना / घुमाना"},
+  {v1:"clarify", v2:"clarified", v3:"clarified", hi:"स्पष्ट करना / साफ करना"},
+  {v1:"clash", v2:"clashed", v3:"clashed", hi:"टकराना / संघर्ष होना"},
+  {v1:"classify", v2:"classified", v3:"classified", hi:"वर्गीकृत करना / श्रेणी में बाँटना"},
+  {v1:"clip", v2:"clipped", v3:"clipped", hi:"काटना / क्लिप लगाना"},
+  {v1:"coincide", v2:"coincided", v3:"coincided", hi:"मेल खाना / एक ही समय पर होना"},
+  {v1:"collapse", v2:"collapsed", v3:"collapsed", hi:"ढह जाना / गिर जाना"},
+  {v1:"collide", v2:"collided", v3:"collided", hi:"टकराना (वाहन आदि)"},
+  {v1:"combine", v2:"combined", v3:"combined", hi:"मिलाना / जोड़ना"},
+  {v1:"commit", v2:"committed", v3:"committed", hi:"प्रतिबद्ध होना / अपराध करना"},
+  {v1:"compel", v2:"compelled", v3:"compelled", hi:"मजबूर करना / बाध्य करना"},
+  {v1:"compile", v2:"compiled", v3:"compiled", hi:"संकलित करना / संग्रह करना"},
+  {v1:"complicate", v2:"complicated", v3:"complicated", hi:"उलझाना / जटिल बनाना"},
+  {v1:"compose", v2:"composed", v3:"composed", hi:"रचना करना / शांत करना"},
+  {v1:"comprehend", v2:"comprehended", v3:"comprehended", hi:"समझना / बोध होना"},
+  {v1:"comprise", v2:"comprised", v3:"comprised", hi:"शामिल करना / से मिलकर बनना"},
+  {v1:"conceal", v2:"concealed", v3:"concealed", hi:"छिपाना / गुप्त रखना"},
+  {v1:"conclude", v2:"concluded", v3:"concluded", hi:"निष्कर्ष निकालना / समाप्त करना"},
+  {v1:"condemn", v2:"condemned", v3:"condemned", hi:"निंदा करना / दोषी ठहराना"},
+  {v1:"conduct", v2:"conducted", v3:"conducted", hi:"संचालन करना / आचरण करना"},
+  {v1:"confine", v2:"confined", v3:"confined", hi:"सीमित करना / कैद करना"},
+  {v1:"conflict", v2:"conflicted", v3:"conflicted", hi:"टकराव होना / विरोध होना"},
+  {v1:"confront", v2:"confronted", v3:"confronted", hi:"सामना करना / मुक़ाबला करना"},
+  {v1:"congratulate", v2:"congratulated", v3:"congratulated", hi:"बधाई देना"},
+  {v1:"conquer", v2:"conquered", v3:"conquered", hi:"जीतना / विजय प्राप्त करना"},
+  {v1:"consent", v2:"consented", v3:"consented", hi:"सहमति देना / राजी होना"},
+  {v1:"conserve", v2:"conserved", v3:"conserved", hi:"संरक्षित करना / बचाना"},
+  {v1:"console", v2:"consoled", v3:"consoled", hi:"सांत्वना देना / ढांढस बंधाना"},
+  {v1:"construct", v2:"constructed", v3:"constructed", hi:"निर्माण करना / बनाना"},
+  {v1:"consult", v2:"consulted", v3:"consulted", hi:"परामर्श करना / सलाह लेना"},
+  {v1:"consume", v2:"consumed", v3:"consumed", hi:"उपभोग करना / खपत करना"},
+  {v1:"contact", v2:"contacted", v3:"contacted", hi:"संपर्क करना"},
+  {v1:"contend", v2:"contended", v3:"contended", hi:"संघर्ष करना / दावा करना"},
+  {v1:"contest", v2:"contested", v3:"contested", hi:"प्रतियोगिता करना / चुनौती देना"},
+  {v1:"contract", v2:"contracted", v3:"contracted", hi:"सिकुड़ना / अनुबंध करना"},
+  {v1:"contrast", v2:"contrasted", v3:"contrasted", hi:"विषमता दिखाना / तुलना करना"},
+  {v1:"contribute", v2:"contributed", v3:"contributed", hi:"योगदान देना"},
+  {v1:"convert", v2:"converted", v3:"converted", hi:"बदलना / रूपांतरित करना"},
+  {v1:"convey", v2:"conveyed", v3:"conveyed", hi:"पहुँचाना / सूचित करना"},
+  
+  {v1:"spray", v2:"sprayed", v3:"sprayed", hi:"छिड़कना"},
+  {v1:"spread", v2:"spread", v3:"spread", hi:"फैलाना"},
+  {v1:"spring", v2:"sprang", v3:"sprung", hi:"उछलना"},
+  {v1:"squeeze", v2:"squeezed", v3:"squeezed", hi:"निचोड़ना"},
+  {v1:"stain", v2:"stained", v3:"stained", hi:"दाग लगाना"},
+  {v1:"stand", v2:"stood", v3:"stood", hi:"खड़े होना"},
+  {v1:"stare", v2:"stared", v3:"stared", hi:"घूरना"},
+  {v1:"start", v2:"started", v3:"started", hi:"शुरू करना"},
+  {v1:"stay", v2:"stayed", v3:"stayed", hi:"रुकना / ठहरना"},
+  {v1:"steal", v2:"stole", v3:"stolen", hi:"चुराना"},
+  {v1:"steer", v2:"steered", v3:"steered", hi:"संचालन करना"},
+  {v1:"step", v2:"stepped", v3:"stepped", hi:"कदम रखना"},
+  {v1:"stick", v2:"stuck", v3:"stuck", hi:"चिपकना / चिपकाना"},
+  {v1:"sting", v2:"stung", v3:"stung", hi:"डंक मारना"},
+  {v1:"stink", v2:"stank", v3:"stunk", hi:"बदबू आना"},
+  {v1:"stir", v2:"stirred", v3:"stirred", hi:"हिलाना / मिलाना"},
+  {v1:"stitch", v2:"stitched", v3:"stitched", hi:"टांका लगाना"},
+  {v1:"stop", v2:"stopped", v3:"stopped", hi:"रोकना / रुकना"},
+  {v1:"store", v2:"stored", v3:"stored", hi:"भंडार करना"},
+  {v1:"strap", v2:"strapped", v3:"strapped", hi:"पट्टा बांधना"},
+  {v1:"strike", v2:"struck", v3:"struck", hi:"प्रहार करना / हड़ताल करना"},
+  {v1:"strip", v2:"stripped", v3:"stripped", hi:"छीलना / कपड़े उतारना"},
+  {v1:"stroke", v2:"stroked", v3:"stroked", hi:"सहलाना"},
+  {v1:"struggle", v2:"struggled", v3:"struggled", hi:"संघर्ष करना"},
+  {v1:"study", v2:"studied", v3:"studied", hi:"अध्ययन करना"},
+  {v1:"stuff", v2:"stuffed", v3:"stuffed", hi:"ठूंसना / भरना"},
+  {v1:"submit", v2:"submitted", v3:"submitted", hi:"जमा करना"},
+  {v1:"succeed", v2:"succeeded", v3:"succeeded", hi:"सफल होना"},
+  {v1:"suck", v2:"sucked", v3:"sucked", hi:"चूसना"},
+  {v1:"suffer", v2:"suffered", v3:"suffered", hi:"कष्ट सहना / पीड़ित होना"},
+  {v1:"suggest", v2:"suggested", v3:"suggested", hi:"सुझाव देना"},
+  {v1:"suit", v2:"suited", v3:"suited", hi:"अनुकूल होना / जंचना"},
+  {v1:"supply", v2:"supplied", v3:"supplied", hi:"आपूर्ति करना"},
+  {v1:"support", v2:"supported", v3:"supported", hi:"समर्थन करना"},
+  {v1:"suppose", v2:"supposed", v3:"supposed", hi:"मान लेना"},
+  {v1:"surprise", v2:"surprised", v3:"surprised", hi:"आश्चर्यचकित करना"},
+  {v1:"surround", v2:"surrounded", v3:"surrounded", hi:"घेरना"},
+  {v1:"survive", v2:"survived", v3:"survived", hi:"जीवित रहना"},
+  {v1:"suspect", v2:"suspected", v3:"suspected", hi:"संदेह करना"},
+  {v1:"swallow", v2:"swallowed", v3:"swallowed", hi:"निगलना"},
+  {v1:"swear", v2:"swore", v3:"sworn", hi:"कसम खाना"},
+  {v1:"sweat", v2:"sweated", v3:"sweated", hi:"पसीना आना"},
+  {v1:"sweep", v2:"swept", v3:"swept", hi:"झाड़ू लगाना"},
+  {v1:"swell", v2:"swelled", v3:"swollen", hi:"सूजना / फूलना"},
+  {v1:"swim", v2:"swam", v3:"swum", hi:"तैरना"},
+  {v1:"swing", v2:"swung", v3:"swung", hi:"झूलना"},
+  {v1:"switch", v2:"switched", v3:"switched", hi:"बदलना / स्विच दबाना"},
+  {v1:"take", v2:"took", v3:"taken", hi:"लेना"},
+  {v1:"talk", v2:"talked", v3:"talked", hi:"बात करना"},
+  {v1:"tame", v2:"tamed", v3:"tamed", hi:"पालतू बनाना"},
+  {v1:"tap", v2:"tapped", v3:"tapped", hi:"थपथपाना / खटखटाना"},
+  {v1:"taste", v2:"tasted", v3:"tasted", hi:"स्वाद लेना / चखना"},
+  {v1:"teach", v2:"taught", v3:"taught", hi:"पढ़ाना / सिखाना"},
+  {v1:"tear", v2:"tore", v3:"torn", hi:"फाड़ना"},
+  {v1:"tease", v2:"teased", v3:"teased", hi:"चिढ़ाना"},
+  {v1:"telephone", v2:"telephoned", v3:"telephoned", hi:"टेलीफोन करना"},
+  {v1:"tell", v2:"told", v3:"told", hi:"बताना"},
+  {v1:"tempt", v2:"tempted", v3:"tempted", hi:"ललचाना"},
+  {v1:"terrify", v2:"terrified", v3:"terrified", hi:"भयभीत करना"},
+  {v1:"test", v2:"tested", v3:"tested", hi:"परीक्षण करना"},
+  {v1:"thank", v2:"thanked", v3:"thanked", hi:"धन्यवाद देना"},
+  {v1:"thaw", v2:"thawed", v3:"thawed", hi:"पिघलना / गलाना"},
+  {v1:"think", v2:"thought", v3:"thought", hi:"सोचना"},
+  {v1:"threaten", v2:"threatened", v3:"threatened", hi:"धमकाना"},
+  {v1:"throw", v2:"threw", v3:"thrown", hi:"फेंकना"},
+  {v1:"tick", v2:"ticked", v3:"ticked", hi:"निशान लगाना"},
+  {v1:"tie", v2:"tied", v3:"tied", hi:"बाँधना"},
+  {v1:"tire", v2:"tired", v3:"tired", hi:"थकना / थकाना"},
+  {v1:"touch", v2:"touched", v3:"touched", hi:"छूना"},
+  {v1:"tour", v2:"toured", v3:"toured", hi:"दौरा करना"},
+  {v1:"tow", v2:"towed", v3:"towed", hi:"खींचकर ले जाना"},
+  {v1:"trace", v2:"traced", v3:"traced", hi:"पता लगाना"},
+  {v1:"trade", v2:"traded", v3:"traded", hi:"व्यापार करना"},
+  {v1:"train", v2:"trained", v3:"trained", hi:"प्रशिक्षण देना"},
+  {v1:"translate", v2:"translated", v3:"translated", hi:"अनुवाद करना"},
+  {v1:"transport", v2:"transported", v3:"transported", hi:"परिवहन करना"},
+  {v1:"trap", v2:"trapped", v3:"trapped", hi:"फंसाना"},
+  {v1:"travel", v2:"traveled", v3:"traveled", hi:"यात्रा करना"},
+  {v1:"treat", v2:"treated", v3:"treated", hi:"व्यवहार करना / इलाज करना"},
+  {v1:"tremble", v2:"trembled", v3:"trembled", hi:"कांपना"},
+  {v1:"trick", v2:"tricked", v3:"tricked", hi:"धोखा देना / चाल चलना"},
+  {v1:"trip", v2:"tripped", v3:"tripped", hi:"ठोकर खाना"},
+  {v1:"trot", v2:"trotted", v3:"trotted", hi:"दुलकी चाल चलना"},
+  {v1:"trouble", v2:"troubled", v3:"troubled", hi:"कष्ट देना / परेशान करना"},
+  {v1:"disturb", v2:"disturbed", v3:"disturbed", hi:"व्यवधान डालना / बाधा पहुंचाना"},
+  {v1:"trust", v2:"trusted", v3:"trusted", hi:"भरोसा करना"},
+  {v1:"try", v2:"tried", v3:"tried", hi:"कोशिश करना"},
+  {v1:"tug", v2:"tugged", v3:"tugged", hi:"झटके से खींचना"},
+  {v1:"tumble", v2:"tumbled", v3:"tumbled", hi:"लुढ़कना / गिरना"},
+  {v1:"turn", v2:"turned", v3:"turned", hi:"मुड़ना / घुमाना"},
+  {v1:"twist", v2:"twisted", v3:"twisted", hi:"मरोड़ना"},
+  {v1:"type", v2:"typed", v3:"typed", hi:"टाइप करना"},
+  {v1:"understand", v2:"understood", v3:"understood", hi:"समझना"},
+  {v1:"undress", v2:"undressed", v3:"undressed", hi:"कपड़े उतारना"},
+  {v1:"unfasten", v2:"unfastened", v3:"unfastened", hi:"खोलना (पट्टी या बटन)"},
+  {v1:"unite", v2:"united", v3:"united", hi:"एकजुट होना"},
+  {v1:"unlock", v2:"unlocked", v3:"unlocked", hi:"ताला खोलना"},
+  {v1:"unpack", v2:"unpacked", v3:"unpacked", hi:"सामान बाहर निकालना"},
+  {v1:"untie", v2:"untied", v3:"untied", hi:"खोलना (गांठ)"},
+  {v1:"use", v2:"used", v3:"used", hi:"उपयोग करना"},
+  {v1:"vanish", v2:"vanished", v3:"vanished", hi:"गायब होना"},
+  {v1:"visit", v2:"visited", v3:"visited", hi:"भ्रमण करना / मिलने जाना"},
+  {v1:"wail", v2:"wailed", v3:"wailed", hi:"विलाप करना"},
+  {v1:"wait", v2:"waited", v3:"waited", hi:"प्रतीक्षा करना"},
+  {v1:"wake", v2:"woke", v3:"woken", hi:"जागना / जगाना"},
+  {v1:"walk", v2:"walked", v3:"walked", hi:"चलना / टहलना"},
+  {v1:"wander", v2:"wandered", v3:"wandered", hi:"भटकना"},
+  {v1:"want", v2:"wanted", v3:"wanted", hi:"चाहना"},
+  {v1:"warm", v2:"warmed", v3:"warmed", hi:"गर्म करना"},
+  {v1:"warn", v2:"warned", v3:"warned", hi:"चेतावनी देना"},
+  {v1:"wash", v2:"washed", v3:"washed", hi:"धोना"},
+  {v1:"waste", v2:"wasted", v3:"wasted", hi:"बर्बाद करना"},
+  {v1:"watch", v2:"watched", v3:"watched", hi:"देखना (ध्यान से)"},
+  {v1:"water", v2:"watered", v3:"watered", hi:"पानी देना"},
+  {v1:"wave", v2:"waved", v3:"waved", hi:"हाथ हिलाना / लहरना"},
+  {v1:"weigh", v2:"weighed", v3:"weighed", hi:"वजन करना"},
+  {v1:"welcome", v2:"welcomed", v3:"welcomed", hi:"स्वागत करना"},
+  {v1:"whine", v2:"whined", v3:"whined", hi:"कराहना / शिकायत करना"},
+  {v1:"whip", v2:"whipped", v3:"whipped", hi:"कोड़े मारना"},
+  {v1:"whirl", v2:"whirled", v3:"whirled", hi:"घूमना / चक्कर खाना"},
+  {v1:"whisper", v2:"whispered", v3:"whispered", hi:"फुसफुसाना"},
+  {v1:"whistle", v2:"whistled", v3:"whistled", hi:"सीटी बजाना"},
+  {v1:"win", v2:"won", v3:"won", hi:"जीतना"},
+  {v1:"wink", v2:"winked", v3:"winked", hi:"आंख मारना"},
+  {v1:"wipe", v2:"wiped", v3:"wiped", hi:"पोंछना"},
+  {v1:"wish", v2:"wished", v3:"wished", hi:"इच्छा करना"},
+  {v1:"wobble", v2:"wobbled", v3:"wobbled", hi:"डगमगाना"},
+  {v1:"wonder", v2:"wondered", v3:"wondered", hi:"आश्चर्य करना"},
+  {v1:"work", v2:"worked", v3:"worked", hi:"काम करना"},
+  {v1:"worry", v2:"worried", v3:"worried", hi:"चिंता करना"},
+  {v1:"wrap", v2:"wrapped", v3:"wrapped", hi:"लपेटना"},
+  {v1:"wreck", v2:"wrecked", v3:"wrecked", hi:"नष्ट करना (विशेषकर जहाज/वाहन)"},
+  {v1:"wrestle", v2:"wrestled", v3:"wrestled", hi:"कुश्ती लड़ना"},
+  {v1:"wriggle", v2:"wriggled", v3:"wriggled", hi:"छटपटाना"},
+  {v1:"write", v2:"wrote", v3:"written", hi:"लिखना"},
+
+  {v1:"x-ray",   v2:"x-rayed",   v3:"x-rayed",   hi:"एक्स-रे करना / जाँच करना"},
+  {v1:"xerox",   v2:"xeroxed",   v3:"xeroxed",   hi:"फोटोकॉपी करना / नकल बनाना"},
+
+  {v1:"yawn",    v2:"yawned",    v3:"yawned",    hi:"जम्हाई लेना"},
+  {v1:"yell",    v2:"yelled",    v3:"yelled",    hi:"चिल्लाना"},
+  {v1:"yield",   v2:"yielded",   v3:"yielded",   hi:"उपज देना / समर्पण करना / रास्ता देना"},
+  {v1:"yearn",   v2:"yearned",   v3:"yearned",   hi:"तरसना / अत्यधिक इच्छा करना"},
+  {v1:"yodel",   v2:"yodeled",   v3:"yodeled",   hi:"योडल करना"},
+  {v1:"yoke",    v2:"yoked",     v3:"yoked",     hi:"जुए से जोड़ना / बाँधना"},
+  {v1:"yip",     v2:"yipped",    v3:"yipped",    hi:"छोटी तेज़ आवाज़ करना / कुत्ते का छोटा भौंकना"},
+  {v1:"yak",     v2:"yakked",    v3:"yakked",    hi:"बकबक करना / बहुत बोलते रहना"},
+
+  {v1:"zero",    v2:"zeroed",    v3:"zeroed",    hi:"शून्य करना / शून्य पर लाना / ध्यान केन्द्रित करना"},
+  {v1:"zoom",    v2:"zoomed",    v3:"zoomed",    hi:"तेज़ी से बढ़ना / बहुत पास आना / बड़ा करके देखना"},
+  {v1:"zigzag",  v2:"zigzagged", v3:"zigzagged", hi:"टेढ़ा-मेढ़ा चलना"},
+  {v1:"zip",     v2:"zipped",    v3:"zipped",    hi:"ज़िप लगाना / तेज़ी से चलना"},
+  {v1:"zap",     v2:"zapped",    v3:"zapped",    hi:"झटका देना / तुरंत नष्ट करना"},
+  {v1:"zone",    v2:"zoned",     v3:"zoned",     hi:"क्षेत्रों में बाँटना / जोन बनाना"},
+  {v1:"zest",    v2:"zested",    v3:"zested",    hi:"छिलका कतरना / स्वाद बढ़ाना"},
+  {v1:"zombify", v2:"zombified", v3:"zombified", hi:"ज़ॉम्बी जैसा बना देना"}
+];
+
+// Sort alphabetically
+VERBS.sort((a,b) => a.v1.localeCompare(b.v1));
+
+// State
+let mode = 'table';
+let currentFilter = 'all';
+let filteredVerbs = [...VERBS];
+let sugFocus = -1;
+
+function getGroups(list) {
+  const groups = {};
+  list.forEach((v, i) => {
+    const l = v.v1[0].toUpperCase();
+    if(!groups[l]) groups[l] = [];
+    groups[l].push({...v, idx: i});
+  });
+  return groups;
+}
+
+function buildAlphaTabs() {
+  const wrap = document.getElementById('alphaTabs');
+  wrap.innerHTML = '';
+  const letters = [...new Set(VERBS.map(v => v.v1[0].toUpperCase()))].sort();
+
+  const all = document.createElement('button');
+  all.className = 'alpha-btn' + (currentFilter==='all'?' active':'');
+  all.textContent = 'ALL';
+  all.onclick = () => filterAlpha('all');
+  wrap.appendChild(all);
+
+  letters.forEach(l => {
+    const b = document.createElement('button');
+    b.className = 'alpha-btn' + (currentFilter===l?' active':'');
+    b.textContent = l;
+    b.id = `ab-${l}`;
+    b.onclick = () => filterAlpha(l);
+    wrap.appendChild(b);
+  });
+}
+
+function filterAlpha(letter) {
+  currentFilter = letter;
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  const target = letter==='all' ? document.querySelector('.alpha-btn') : document.getElementById(`ab-${letter}`);
+  if(target) target.classList.add('active');
+  
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if(letter === 'all') {
+    filteredVerbs = q ? VERBS.filter(v => matchVerb(v, q)) : [...VERBS];
+  } else {
+    filteredVerbs = VERBS.filter(v => v.v1[0].toUpperCase() === letter && (!q || matchVerb(v,q)));
+  }
+  buildMain();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function matchVerb(v, q) {
+  return v.v1.toLowerCase().includes(q) ||
+         v.v2.toLowerCase().includes(q) ||
+         v.v3.toLowerCase().includes(q) ||
+         v.hi.includes(q);
+}
+
+// Function to toggle Row Details in Table
+function toggleDetails(v1Id) {
+  const detailRow = document.getElementById(`det-${v1Id}`);
+  if(detailRow) {
+    detailRow.classList.toggle('show');
+  }
+}
+
+// Build main content
+function buildMain() {
+  const main = document.getElementById('main');
+  const sidebar = document.getElementById('sidebar');
+  const noRes = document.getElementById('noResults');
+  main.innerHTML = '';
+  sidebar.innerHTML = '';
+  main.appendChild(noRes);
+
+  if(filteredVerbs.length === 0) {
+    noRes.style.display = 'block';
+    document.getElementById('scNum').textContent = 0;
+    return;
+  }
+  noRes.style.display = 'none';
+  document.getElementById('scNum').textContent = filteredVerbs.length;
+
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const groups = getGroups(filteredVerbs);
+  let globalNum = 0;
+
+  Object.keys(groups).sort().forEach(letter => {
+    const vlist = groups[letter];
+
+    // Sidebar item
+    const si = document.createElement('div');
+    si.className = 'sb-item';
+    si.id = `si-${letter}`;
+    si.innerHTML = `<span class="sb-letter">${letter}</span><span>—</span><span class="sb-cnt">${vlist.length} verbs</span>`;
+    si.onclick = () => goToLetter(letter);
+    sidebar.appendChild(si);
+
+    // Section
+    const sec = document.createElement('div');
+    sec.className = 'alpha-section';
+    sec.id = `sec-${letter}`;
+
+    const head = document.createElement('div');
+    head.className = 'alpha-head';
+    head.innerHTML = `<span class="alpha-letter">${letter}</span><span class="alpha-count">${vlist.length} VERB${vlist.length>1?'S':''}</span>`;
+    sec.appendChild(head);
+
+    // Table
+    const table = document.createElement('table');
+    table.className = 'verb-table';
+    table.innerHTML = `<thead><tr>
+      <th style="width:36px">#</th>
+      <th>Verb (English)</th>
+      <th>हिंदी अर्थ</th>
+    </tr></thead>`;
+    const tbody = document.createElement('tbody');
+
+    // Cards grid
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+
+    vlist.forEach(v => {
+      globalNum++;
+      const num = globalNum;
+      const h = (text) => q ? text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>') : text;
+      
+      const uniqueId = `v-${v.v1.replace(/\s+/g, '-')}`;
+
+      // Table Main Row
+      const trMain = document.createElement('tr');
+      trMain.className = 'main-row';
+      trMain.onclick = () => toggleDetails(uniqueId);
+      trMain.innerHTML = `
+        <td class="td-num">${String(num).padStart(3,'0')}</td>
+        <td class="td-v1">${h(v.v1)}</td>
+        <td class="td-hi">${h(v.hi)}</td>`;
+      
+      // Table Detail Row (Hidden initially)
+      const trDetail = document.createElement('tr');
+      trDetail.id = `det-${uniqueId}`;
+      trDetail.className = 'detail-row';
+      trDetail.innerHTML = `
+        <td colspan="3" style="padding: 0;">
+          <div class="detail-container">
+             <div class="detail-box">
+                <span class="db-lbl">V1 (Base Form)</span>
+                <span class="db-val db-v1">${v.v1}</span>
+             </div>
+             <div class="detail-box">
+                <span class="db-lbl">V2 (Past Simple)</span>
+                <span class="db-val db-v2">${v.v2}</span>
+             </div>
+             <div class="detail-box">
+                <span class="db-lbl">V3 (Past Participle)</span>
+                <span class="db-val db-v3">${v.v3}</span>
+             </div>
+          </div>
+        </td>`;
+
+      tbody.appendChild(trMain);
+      tbody.appendChild(trDetail);
+
+      // Card
+      const card = document.createElement('div');
+      card.className = 'v-card';
+      card.innerHTML = `
+        <span class="vc-num">${String(num).padStart(3,'0')}</span>
+        <div class="vc-header">
+           <div class="vc-v1">${h(v.v1)}</div>
+           <div class="vc-hindi">(${h(v.hi)})</div>
+        </div>
+        <div class="vc-forms">
+          <div class="vc-form v2"><span class="vc-lbl">V2</span><span class="vc-val">${h(v.v2)}</span></div>
+          <div class="vc-form v3"><span class="vc-lbl">V3</span><span class="vc-val">${h(v.v3)}</span></div>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    table.appendChild(tbody);
+    sec.appendChild(table);
+    sec.appendChild(grid);
+    main.appendChild(sec);
+  });
+
+  updateSidebarActive();
+}
+
+function goToLetter(letter) {
+  const el = document.getElementById(`sec-${letter}`);
+  if(!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 185;
+  window.scrollTo({top, behavior:'smooth'});
+}
+
+function updateSidebarActive() {
+  const secs = document.querySelectorAll('.alpha-section');
+  let active = null;
+  secs.forEach(s => {
+    if(s.getBoundingClientRect().top <= 200) active = s.id.replace('sec-','');
+  });
+  document.querySelectorAll('.sb-item').forEach(si => {
+    si.classList.toggle('active', si.id === `si-${active}`);
+  });
+}
+
+// SEARCH
+function doSearch(q) {
+  const qlow = q.trim().toLowerCase();
+  if(!qlow) {
+    filteredVerbs = currentFilter==='all' ? [...VERBS] : VERBS.filter(v=>v.v1[0].toUpperCase()===currentFilter);
+  } else {
+    const base = currentFilter==='all' ? VERBS : VERBS.filter(v=>v.v1[0].toUpperCase()===currentFilter);
+    filteredVerbs = base.filter(v => matchVerb(v, qlow));
+  }
+  buildMain();
+}
+
+function showSuggestions(q) {
+  const box = document.getElementById('suggestions');
+  if(q.length < 2) { box.classList.remove('show'); return; }
+  const qlow = q.toLowerCase();
+  const matches = VERBS.filter(v => matchVerb(v, qlow)).slice(0, 8);
+  if(!matches.length) { box.classList.remove('show'); return; }
+
+  const h = (text) => text.replace(new RegExp(`(${qlow.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+  box.innerHTML = matches.map((v,i) => `
+    <div class="sug-item" data-v1="${v.v1}" onmousedown="pickSuggestion('${v.v1}')">
+      <span class="sug-v1">${h(v.v1)}</span>
+      <span class="sug-hindi">${h(v.hi)}</span>
+      <span class="sug-forms">${v.v2} / ${v.v3}</span>
+    </div>`).join('');
+  box.classList.add('show');
+  sugFocus = -1;
+}
+
+function pickSuggestion(v1) {
+  const inp = document.getElementById('searchInput');
+  inp.value = v1;
+  document.getElementById('suggestions').classList.remove('show');
+  doSearch(v1);
+  sugFocus = -1;
+}
+
+function clearSearch() {
+  const inp = document.getElementById('searchInput');
+  inp.value = '';
+  document.getElementById('suggestions').classList.remove('show');
+  doSearch('');
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  const items = document.querySelectorAll('.sug-item');
+  if(e.key === 'ArrowDown') { sugFocus = Math.min(sugFocus+1, items.length-1); highlightSug(items); e.preventDefault(); }
+  else if(e.key === 'ArrowUp') { sugFocus = Math.max(sugFocus-1, -1); highlightSug(items); e.preventDefault(); }
+  else if(e.key === 'Enter' && sugFocus >= 0) { pickSuggestion(items[sugFocus].dataset.v1); e.preventDefault(); }
+  else if(e.key === 'Escape') { document.getElementById('suggestions').classList.remove('show'); }
+});
+
+function highlightSug(items) {
+  items.forEach((item,i) => item.classList.toggle('focused', i===sugFocus));
+  if(sugFocus >= 0) items[sugFocus].scrollIntoView({block:'nearest'});
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  const q = e.target.value;
+  showSuggestions(q);
+  doSearch(q);
+});
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('.search-inner')) document.getElementById('suggestions').classList.remove('show');
+});
+
+// MODE
+const infoTexts = {
+  table: '<b>Table Mode</b> — Row पर Click करें और V1, V2, V3 देखें',
+  cards: '<b>Cards Mode</b> — प्रत्येक क्रिया एक सुंदर कार्ड में दिखाई देती है'
+};
+
+function setMode(m) {
+  mode = m;
+  document.body.className = `mode-${m}`;
+  ['table','cards'].forEach(x => document.getElementById(`mb-${x}`).classList.toggle('active', x===m));
+  document.getElementById('infoText').innerHTML = infoTexts[m];
+  buildMain();
+}
+
+window.addEventListener('scroll', updateSidebarActive, {passive:true});
+
+// INIT
+buildAlphaTabs();
+buildMain();
+</script>
+</body>
+</html>
