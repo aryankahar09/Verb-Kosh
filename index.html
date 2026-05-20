@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>English Verbs • क्रिया शब्द कोश</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Noto+Sans+Devanagari:wght@400;600&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1121">
+<link rel="apple-touch-icon" href="icon-192x192.png">
+  
+  <style>
 :root {
   /* Navy Blue Theme Variables */
   --bg: #0b1121;           /* Dark Navy Background */
@@ -1540,5 +1544,15 @@ window.addEventListener('scroll', updateSidebarActive, {passive:true});
 buildAlphaTabs();
 buildMain();
 </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then((reg) => console.log('Service Worker Registered Successfully!', reg))
+        .catch((err) => console.log('Service Worker Registration Failed!', err));
+    });
+  }
+  </script>
+  
 </body>
 </html>
